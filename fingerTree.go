@@ -2,9 +2,9 @@ package fingerTree23
 
 type Data interface{}
 
-type FoldFunc func(interface{}, Data) interface{}
+type FoldFunc func(a Data, b Data) Data
 type Foldable interface {
-	Foldl(f FoldFunc, initial interface{}) interface{}
+	Foldl(f FoldFunc, initial Data) Data
 }
 
 type FingerTree interface {
@@ -22,7 +22,7 @@ type node2 struct {
 	data [2]Data
 }
 
-func (n node2) Foldl(f FoldFunc, initial interface{}) interface{} {
+func (n node2) Foldl(f FoldFunc, initial Data) Data {
 	return Foldl(f, initial, n.data[0:], 2)
 }
 
@@ -30,7 +30,7 @@ type node3 struct {
 	data [3]Data
 }
 
-func (n node3) Foldl(f FoldFunc, initial interface{}) interface{} {
+func (n node3) Foldl(f FoldFunc, initial Data) Data {
 	return Foldl(f, initial, n.data[0:], 3)
 }
 
@@ -40,8 +40,8 @@ type ftree struct {
 	child FingerTree
 }
 
-func (t ftree) Foldl(f FoldFunc, initial interface{}) interface{} {
-	lift := func(init interface{}, data Data) interface{} {
+func (t ftree) Foldl(f FoldFunc, initial Data) Data {
+	lift := func(init Data, data Data) Data {
 		n := data.(node)
 		return n.Foldl(f, init)
 	}
@@ -112,7 +112,7 @@ type single struct {
 	data Data
 }
 
-func (s single) Foldl(f FoldFunc, initial interface{}) interface{} {
+func (s single) Foldl(f FoldFunc, initial Data) Data {
 	return f(initial, s.data)
 }
 
@@ -139,7 +139,7 @@ func (tree empty) Pushb(d Data) FingerTree {
 }
 
 func ToSlice(t FingerTree) []Data {
-	app := func(a interface{}, b Data) interface{} {
+	app := func(a Data, b Data) Data {
 		return append(a.([]Data), b)
 	}
 	return t.Foldl(app, make([]Data, 0)).([]Data)

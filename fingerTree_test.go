@@ -58,8 +58,8 @@ func TestNode3ImplementsNode(test *testing.T) {
 
 func TestNode2Foldl(test *testing.T) {
 	n := node2{[2]Data{1, 2}}
-	add := func(a interface{}, b Data) interface{} {
-		return interface{}(a.(int) + b.(int))
+	add := func(a Data, b Data) Data {
+		return Data(a.(int) + b.(int))
 	}
 	r := n.Foldl(add, 0)
 	if r != 3 {
@@ -69,8 +69,8 @@ func TestNode2Foldl(test *testing.T) {
 
 func TestNode3Foldl(test *testing.T) {
 	n := node3{[3]Data{1, 2, 3}}
-	add := func(a interface{}, b Data) interface{} {
-		return interface{}(a.(int) + b.(int))
+	add := func(a Data, b Data) Data {
+		return Data(a.(int) + b.(int))
 	}
 	r := n.Foldl(add, 0)
 	if r != 6 {
@@ -80,8 +80,8 @@ func TestNode3Foldl(test *testing.T) {
 
 func TestSingleFoldl(test *testing.T) {
 	n := &single{1}
-	add := func(a interface{}, b Data) interface{} {
-		return interface{}(a.(int) + b.(int))
+	add := func(a Data, b Data) Data {
+		return Data(a.(int) + b.(int))
 	}
 	r := n.Foldl(add, 0)
 	if r != 1 {
