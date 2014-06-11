@@ -71,3 +71,56 @@ func TestNode3Foldl(test *testing.T) {
 		test.Error("Expected n.Foldl(func (a, b uint) { return a + b }, 0) to return 3, got " + string(r.(uint)))
 	}
 }
+
+func TestSingleFoldl(test *testing.T) {
+	n := &single{1}
+	add := func(a interface{}, b Data) interface{} {
+		return interface{}(a.(int) + b.(int))
+	}
+	r := n.Foldl(add, 0)
+	if r != 1 {
+		test.Error("Expected n.Foldl to return 1, got " + string(r.(int)))
+	}
+}
+
+func cmpslices(a, b []Data) bool {
+	if len(a) != len(b) {
+		fmt.Println("Lengths differ")
+		return false
+	}
+	for i, v := range a {
+		if v != b[i] {
+			fmt.Println("Item at index ", i, " differs")
+			return false
+		}
+	}
+	return true
+}
+
+func TestSinglePushf(test *testing.T) {
+	n := &single{1}
+	r := n.Pushf(2)
+	if cmpslices(ToSlice(r), []Data{2, 1}) == false {
+		test.Error(fmt.Sprintf("Expected n.Pushf(2) to result in sequence [2 1], got %v", ToSlice(r)))
+	}
+}
+
+func TestFTreePushf(test *testing.T) {
+	var n FingerTree = &single{0}
+
+	toSlice := func(t FingerTree) []Data {
+		app := func(a interface{}, b Data) interface{} {
+			return append(a.([]Data), b)
+		}
+		return t.Foldl(app, make([]Data, 0)).([]Data)
+	}
+
+	for i := 1; i < 8; i++ {
+		n = n.Pushf(i)
+		fmt.Println(toSlice(n))
+	}
+
+	if cmpslices(toSlice(n), []Data{7, 6, 5, 4, 3, 2, 1, 0}) == false {
+		test.Error(fmt.Sprintf("Expected push sequence to result in sequence [7 6 5 4 3 2 1], got %v", toSlice(n)))
+	}
+}
