@@ -14,18 +14,6 @@ func ToSliceR(t Foldable) []Any {
 	return t.Foldr(app, make([]Any, 0)).([]Any)
 }
 
-func SliceEqual(a, b []Any) bool {
-	if len(a) != len(b) {
-		return false
-	}
-	for i, v := range a {
-		if v != b[i] {
-			return false
-		}
-	}
-	return true
-}
-
 func test_foldr(test *testing.T, name string, box Foldable, values []Any) {
 	unfolded := ToSliceR(box)
 	if ! SliceEqual(unfolded, values) {

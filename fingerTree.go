@@ -137,10 +137,3 @@ func (tree empty) Pushf(d Any) FingerTree {
 func (tree empty) Pushb(d Any) FingerTree {
 	return &single{d};
 }
-
-func ToSlice(t FingerTree) []Any {
-	app := func(a Any, b Any) Any {
-		return append(a.([]Any), b)
-	}
-	return t.Foldl(app, make([]Any, 0)).([]Any)
-}
