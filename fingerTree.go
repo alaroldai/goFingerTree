@@ -2,9 +2,12 @@ package fingerTree23
 
 type Any interface{}
 
-type FoldFunc func(a Any, b Any) Any
+type FoldFunc func(Any, Any) Any
 type Foldable interface {
+	// foldl :: (b -> a -> b) -> b -> b
 	Foldl(f FoldFunc, initial Any) Any
+	// foldr :: (a -> b -> b) -> b -> b
+	Foldr(f FoldFunc, initial Any) Any
 }
 
 type FingerTree interface {
@@ -112,6 +115,7 @@ type single struct {
 func (s single) Foldl(f FoldFunc, initial Any) Any {
 	return f(initial, s.data)
 }
+
 func (s single) Pushf(d Any) FingerTree {
 	return &ftree{[]Any{d, s.data}, []Any{}, empty{}}
 }
