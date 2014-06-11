@@ -113,6 +113,18 @@ func TestFTreePushf(test *testing.T) {
 	}
 
 	if cmpslices(ToSlice(n), []Data{7, 6, 5, 4, 3, 2, 1, 0}) == false {
-		test.Error(fmt.Sprintf("Expected push sequence to result in sequence [7 6 5 4 3 2 1], got %v", ToSlice(n)))
+		test.Error(fmt.Sprintf("Expected push sequence to result in sequence [7 6 5 4 3 2 1 0], got %v", ToSlice(n)))
+	}
+}
+
+func TestFTreePushb(test *testing.T) {
+	var n FingerTree = &single{0}
+
+	for i := 1; i < 8; i++ {
+		n = n.Pushb(i)
+	}
+
+	if cmpslices(ToSlice(n), []Data{0, 1, 2, 3, 4, 5, 6, 7}) == false {
+		test.Error(fmt.Sprintf("Expected push sequence to result in sequence [0 1 2 3 4 5 6 7], got %v", ToSlice(n)))
 	}
 }

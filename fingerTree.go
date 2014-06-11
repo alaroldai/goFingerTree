@@ -94,7 +94,7 @@ func (t ftree) Pushb(d Data) FingerTree {
 	if len(t.right) < 4 {
 		return &ftree{
 			t.left,
-			append(t.right, []Data{d}),
+			append(t.right, d),
 			t.child,
 		}
 	}
