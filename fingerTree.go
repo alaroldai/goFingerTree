@@ -50,12 +50,7 @@ func (t ftree) Foldl(f FoldFunc, initial interface{}) interface{} {
 	var lright int = len(t.right)
 
 	var a interface{} = Foldl(f, initial, t.left, lleft)
-	var b interface{}
-	if t.child != nil {
-		b = t.child.Foldl(lift, a)
-	} else {
-		b = a
-	}
+	var b interface{} = t.child.Foldl(lift, a)
 	return Foldl(f, b, t.right, lright)
 }
 
@@ -77,11 +72,7 @@ func (t ftree) Pushf(d Data) FingerTree {
 		},
 	}
 
-	if t.child != nil {
-		child = t.child.Pushf(pushdown)
-	} else {
-		child = &single{pushdown}
-	}
+	child = t.child.Pushf(pushdown)
 
 	return &ftree{
 		[]Data{d, t.left[0]},
@@ -108,11 +99,8 @@ func (t ftree) Pushb(d Data) FingerTree {
 		},
 	}
 
-	if t.child != nil {
-		child = t.child.Pushb(pushdown)
-	} else {
-		child = &single{pushdown}
-	}
+	child = t.child.Pushb(pushdown)
+
 	return &ftree{
 		t.left,
 		[]Data{t.right[3], d},
@@ -129,11 +117,25 @@ func (s single) Foldl(f FoldFunc, initial interface{}) interface{} {
 }
 
 func (s single) Pushf(d Data) FingerTree {
-	return &ftree{[]Data{d, s.data}, []Data{}, nil}
+	return &ftree{[]Data{d, s.data}, []Data{}, empty{}}
 }
 
 func (s single) Pushb(d Data) FingerTree {
-	return &ftree{[]Data{s.data, d}, []Data{}, nil}
+	return &ftree{[]Data{s.data, d}, []Data{}, empty{}}
+}
+
+type empty struct {}
+
+func (tree empty) Foldl(f FoldFunc, initial interface{}) interface{} {
+	return initial
+}
+
+func (tree empty) Pushf(d Data) FingerTree {
+	return &single{d};
+}
+
+func (tree empty) Pushb(d Data) FingerTree {
+	return &single{d};
 }
 
 func ToSlice(t FingerTree) []Data {
