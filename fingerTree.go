@@ -23,7 +23,7 @@ type node2 struct {
 }
 
 func (n node2) Foldl(f FoldFunc, initial Any) Any {
-	return Foldl(f, initial, n.data[0:], 2)
+	return Foldl(f, initial, n.data[:])
 }
 
 type node3 struct {
@@ -31,7 +31,7 @@ type node3 struct {
 }
 
 func (n node3) Foldl(f FoldFunc, initial Any) Any {
-	return Foldl(f, initial, n.data[0:], 3)
+	return Foldl(f, initial, n.data[:])
 }
 
 type ftree struct {
@@ -46,12 +46,9 @@ func (t ftree) Foldl(f FoldFunc, initial Any) Any {
 		return n.Foldl(f, init)
 	}
 
-	var lleft int = len(t.left)
-	var lright int = len(t.right)
-
-	var a interface{} = Foldl(f, initial, t.left, lleft)
+	var a interface{} = Foldl(f, initial, t.left)
 	var b interface{} = t.child.Foldl(lift, a)
-	return Foldl(f, b, t.right, lright)
+	return Foldl(f, b, t.right)
 }
 
 func (t ftree) Pushf(d Any) FingerTree {
