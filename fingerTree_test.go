@@ -57,9 +57,9 @@ func TestNode3ImplementsNode(test *testing.T) {
 }
 
 func TestNode2Foldl(test *testing.T) {
-	n := node2{[2]Data{1, 2}}
-	add := func(a Data, b Data) Data {
-		return Data(a.(int) + b.(int))
+	n := node2{[2]Any{1, 2}}
+	add := func(a Any, b Any) Any {
+		return Any(a.(int) + b.(int))
 	}
 	r := n.Foldl(add, 0)
 	if r != 3 {
@@ -68,9 +68,9 @@ func TestNode2Foldl(test *testing.T) {
 }
 
 func TestNode3Foldl(test *testing.T) {
-	n := node3{[3]Data{1, 2, 3}}
-	add := func(a Data, b Data) Data {
-		return Data(a.(int) + b.(int))
+	n := node3{[3]Any{1, 2, 3}}
+	add := func(a Any, b Any) Any {
+		return Any(a.(int) + b.(int))
 	}
 	r := n.Foldl(add, 0)
 	if r != 6 {
@@ -80,8 +80,8 @@ func TestNode3Foldl(test *testing.T) {
 
 func TestSingleFoldl(test *testing.T) {
 	n := &single{1}
-	add := func(a Data, b Data) Data {
-		return Data(a.(int) + b.(int))
+	add := func(a Any, b Any) Any {
+		return Any(a.(int) + b.(int))
 	}
 	r := n.Foldl(add, 0)
 	if r != 1 {
@@ -91,8 +91,8 @@ func TestSingleFoldl(test *testing.T) {
 
 func TestEmptyFoldl(test *testing.T) {
 	n := &empty{}
-	add := func(a interface{}, b Data) interface{} {
-		return interface{}(a.(int) + b.(int))
+	add := func(a Any, b Any) Any {
+		return Any(a.(int) + b.(int))
 	}
 	r := n.Foldl(add, 0)
 	if r != 0 {
@@ -100,7 +100,7 @@ func TestEmptyFoldl(test *testing.T) {
 	}
 }
 
-func cmpslices(a, b []Data) bool {
+func cmpslices(a, b []Any) bool {
 	if len(a) != len(b) {
 		fmt.Println("Lengths differ")
 		return false
@@ -116,14 +116,14 @@ func cmpslices(a, b []Data) bool {
 
 func TestEmptyPushf(test *testing.T) {
 	v := empty{}.Pushf(1)
-	if cmpslices(ToSlice(v), []Data{1}) == false {
+	if cmpslices(ToSlice(v), []Any{1}) == false {
 		test.Error(fmt.Sprintf("Expected empty{}.Pushf(1) to result in single{1}, got %v", ToSlice(v)))
 	}
 }
 
 func TestEmptyPushb(test *testing.T) {
 	v := empty{}.Pushb(1)
-	if cmpslices(ToSlice(v), []Data{1}) == false {
+	if cmpslices(ToSlice(v), []Any{1}) == false {
 		test.Error(fmt.Sprintf("Expected empty{}.Pushb(1) to result in single{1}, got %v", ToSlice(v)))
 	}
 }
@@ -131,7 +131,7 @@ func TestEmptyPushb(test *testing.T) {
 func TestSinglePushf(test *testing.T) {
 	n := &single{1}
 	r := n.Pushf(2)
-	if cmpslices(ToSlice(r), []Data{2, 1}) == false {
+	if cmpslices(ToSlice(r), []Any{2, 1}) == false {
 		test.Error(fmt.Sprintf("Expected n.Pushf(2) to result in sequence [2 1], got %v", ToSlice(r)))
 	}
 }
@@ -143,7 +143,7 @@ func TestFTreePushf(test *testing.T) {
 		n = n.Pushf(i)
 	}
 
-	if cmpslices(ToSlice(n), []Data{7, 6, 5, 4, 3, 2, 1, 0}) == false {
+	if cmpslices(ToSlice(n), []Any{7, 6, 5, 4, 3, 2, 1, 0}) == false {
 		test.Error(fmt.Sprintf("Expected push sequence to result in sequence [7 6 5 4 3 2 1 0], got %v", ToSlice(n)))
 	}
 }
@@ -155,7 +155,7 @@ func TestFTreePushb(test *testing.T) {
 		n = n.Pushb(i)
 	}
 
-	if cmpslices(ToSlice(n), []Data{0, 1, 2, 3, 4, 5, 6, 7}) == false {
+	if cmpslices(ToSlice(n), []Any{0, 1, 2, 3, 4, 5, 6, 7}) == false {
 		test.Error(fmt.Sprintf("Expected push sequence to result in sequence [0 1 2 3 4 5 6 7], got %v", ToSlice(n)))
 	}
 }
