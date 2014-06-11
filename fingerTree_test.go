@@ -38,6 +38,12 @@ func TestSingleImplementsFingerTree(test *testing.T) {
 	TypeConformityTest(test, stype, itype)
 }
 
+func TestEmptyImplementsFingerTree(test *testing.T) {
+	stype := reflect.TypeOf(empty{})
+	itype := reflect.TypeOf((*FingerTree)(nil)).Elem()
+	TypeConformityTest(test, stype, itype)
+}
+
 func TestNode2ImplementsNode(test *testing.T) {
 	stype := reflect.TypeOf(node2{})
 	itype := reflect.TypeOf((*node)(nil)).Elem()
@@ -83,6 +89,17 @@ func TestSingleFoldl(test *testing.T) {
 	}
 }
 
+func TestEmptyFoldl(test *testing.T) {
+	n := &empty{}
+	add := func(a interface{}, b Data) interface{} {
+		return interface{}(a.(int) + b.(int))
+	}
+	r := n.Foldl(add, 0)
+	if r != 0 {
+		test.Error("Expected n.Foldl to return 0, got " + string(r.(int)))
+	}
+}
+
 func cmpslices(a, b []Data) bool {
 	if len(a) != len(b) {
 		fmt.Println("Lengths differ")
@@ -95,6 +112,20 @@ func cmpslices(a, b []Data) bool {
 		}
 	}
 	return true
+}
+
+func TestEmptyPushf(test *testing.T) {
+	v := empty{}.Pushf(1)
+	if cmpslices(ToSlice(v), []Data{1}) == false {
+		test.Error(fmt.Sprintf("Expected empty{}.Pushf(1) to result in single{1}, got %v", ToSlice(v)))
+	}
+}
+
+func TestEmptyPushb(test *testing.T) {
+	v := empty{}.Pushb(1)
+	if cmpslices(ToSlice(v), []Data{1}) == false {
+		test.Error(fmt.Sprintf("Expected empty{}.Pushb(1) to result in single{1}, got %v", ToSlice(v)))
+	}
 }
 
 func TestSinglePushf(test *testing.T) {
