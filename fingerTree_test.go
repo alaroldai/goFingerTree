@@ -108,19 +108,11 @@ func TestSinglePushf(test *testing.T) {
 func TestFTreePushf(test *testing.T) {
 	var n FingerTree = &single{0}
 
-	toSlice := func(t FingerTree) []Data {
-		app := func(a interface{}, b Data) interface{} {
-			return append(a.([]Data), b)
-		}
-		return t.Foldl(app, make([]Data, 0)).([]Data)
-	}
-
 	for i := 1; i < 8; i++ {
 		n = n.Pushf(i)
-		fmt.Println(toSlice(n))
 	}
 
-	if cmpslices(toSlice(n), []Data{7, 6, 5, 4, 3, 2, 1, 0}) == false {
-		test.Error(fmt.Sprintf("Expected push sequence to result in sequence [7 6 5 4 3 2 1], got %v", toSlice(n)))
+	if cmpslices(ToSlice(n), []Data{7, 6, 5, 4, 3, 2, 1, 0}) == false {
+		test.Error(fmt.Sprintf("Expected push sequence to result in sequence [7 6 5 4 3 2 1], got %v", ToSlice(n)))
 	}
 }

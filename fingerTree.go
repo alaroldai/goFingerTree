@@ -7,9 +7,6 @@ type Foldable interface {
 	Foldl(f FoldFunc, initial interface{}) interface{}
 }
 
-type BackQueue interface {
-}
-
 type FingerTree interface {
 	Foldable
 
@@ -141,10 +138,6 @@ func (s single) Pushb(d Data) FingerTree {
 
 func ToSlice(t FingerTree) []Data {
 	app := func(a interface{}, b Data) interface{} {
-		_, s := b.([]Data)
-		if s {
-			return append(a.([]Data), b.([]Data)...)
-		}
 		return append(a.([]Data), b)
 	}
 	return t.Foldl(app, make([]Data, 0)).([]Data)
