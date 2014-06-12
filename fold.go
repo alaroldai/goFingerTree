@@ -6,3 +6,10 @@ func Foldl(f FoldFunc, initial interface{}, s []Data, length int) interface{} {
 	}
 	return initial
 }
+
+func Foldr(f FoldFunc, initial interface{}, s []Data, length int) interface{} {
+	if length > 0 {
+		return f(Foldr(f, initial, s[1:], length-1), s[0])
+	}
+	return initial
+}
