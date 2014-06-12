@@ -1,47 +1,47 @@
 package fingerTree23
 
-type Data interface{}
+type Any interface{}
 
-type IterFunc func(Data)
+type IterFunc func(Any)
 type Iterable interface {
 	Iterl(IterFunc)
 	Iterr(IterFunc)
 }
 
-type FoldFunc func(interface{}, Data) interface{}
+type FoldFunc func(Any, Any) Any
 type Foldable interface {
 	Iterable
-	Foldl(f FoldFunc, initial interface{}) interface{}
-	Foldr(f FoldFunc, initial interface{}) interface{}
+	Foldl(f FoldFunc, initial Any) Any
+	Foldr(f FoldFunc, initial Any) Any
 }
 
 type FingerTree interface {
 	Foldable
 
-	Pushl(d Data) FingerTree
-	Pushr(d Data) FingerTree
+	Pushl(d Any) FingerTree
+	Pushr(d Any) FingerTree
 
-	Popl() (FingerTree, Data)
+	Popl() (FingerTree, Any)
 }
 
 type node interface {
 	Foldable
-	toDigit() []Data
+	toDigit() []Any
 }
 
 type node2 struct {
-	data [2]Data
+	data [2]Any
 }
 
-func (n node2) toDigit() []Data {
+func (n node2) toDigit() []Any {
 	return n.data[:]
 }
 
-func (n node2) Foldl(f FoldFunc, initial interface{}) interface{} {
+func (n node2) Foldl(f FoldFunc, initial Any) Any {
 	return Foldl(f, initial, n.data[:], 2)
 }
 
-func (n node2) Foldr(f FoldFunc, initial interface{}) interface{} {
+func (n node2) Foldr(f FoldFunc, initial Any) Any {
 	return Foldr(f, initial, n.data[:], 2)
 }
 
@@ -54,18 +54,18 @@ func (n node2) Iterr(f IterFunc) {
 }
 
 type node3 struct {
-	data [3]Data
+	data [3]Any
 }
 
-func (n node3) toDigit() []Data {
+func (n node3) toDigit() []Any {
 	return n.data[:]
 }
 
-func (n node3) Foldl(f FoldFunc, initial interface{}) interface{} {
+func (n node3) Foldl(f FoldFunc, initial Any) Any {
 	return Foldl(f, initial, n.data[:], 3)
 }
 
-func (n node3) Foldr(f FoldFunc, initial interface{}) interface{} {
+func (n node3) Foldr(f FoldFunc, initial Any) Any {
 	return Foldr(f, initial, n.data[:], 3)
 }
 
@@ -78,13 +78,13 @@ func (n node3) Iterr(f IterFunc) {
 }
 
 type ftree struct {
-	left  []Data
-	right []Data
+	left  []Any
+	right []Any
 	child FingerTree
 }
 
-func (t ftree) Foldl(f FoldFunc, initial interface{}) interface{} {
-	lift := func(init interface{}, data Data) interface{} {
+func (t ftree) Foldl(f FoldFunc, initial Any) Any {
+	lift := func(init Any, data Any) Any {
 		n := data.(node)
 		return n.Foldl(f, init)
 	}
@@ -92,13 +92,13 @@ func (t ftree) Foldl(f FoldFunc, initial interface{}) interface{} {
 	var lleft int = len(t.left)
 	var lright int = len(t.right)
 
-	var a interface{} = Foldl(f, initial, t.left, lleft)
-	var b interface{} = t.child.Foldl(lift, a)
+	var a Any = Foldl(f, initial, t.left, lleft)
+	var b Any = t.child.Foldl(lift, a)
 	return Foldl(f, b, t.right, lright)
 }
 
-func (t ftree) Foldr(f FoldFunc, initial interface{}) interface{} {
-	lift := func(init interface{}, data Data) interface{} {
+func (t ftree) Foldr(f FoldFunc, initial Any) Any {
+	lift := func(init Any, data Any) Any {
 		n := data.(node)
 		return n.Foldr(f, init)
 	}
@@ -111,10 +111,10 @@ func (t ftree) Foldr(f FoldFunc, initial interface{}) interface{} {
 	return Foldr(f, b, t.left, lleft)
 }
 
-func (t ftree) Pushl(d Data) FingerTree {
+func (t ftree) Pushl(d Any) FingerTree {
 	if len(t.left) < 4 {
 		return &ftree{
-			append([]Data{d}, t.left...),
+			append([]Any{d}, t.left...),
 			t.right,
 			t.child,
 		}
@@ -122,7 +122,7 @@ func (t ftree) Pushl(d Data) FingerTree {
 
 	var child FingerTree
 	pushdown := &node3{
-		[3]Data{
+		[3]Any{
 			t.left[1],
 			t.left[2],
 			t.left[3],
@@ -132,13 +132,13 @@ func (t ftree) Pushl(d Data) FingerTree {
 	child = t.child.Pushl(pushdown)
 
 	return &ftree{
-		[]Data{d, t.left[0]},
+		[]Any{d, t.left[0]},
 		t.right,
 		child,
 	}
 }
 
-func (t ftree) Popl() (FingerTree, Data) {
+func (t ftree) Popl() (FingerTree, Any) {
 	if len(t.left) > 1 {
 		return &ftree{
 				t.left[1:],
@@ -186,7 +186,7 @@ func (t ftree) Popl() (FingerTree, Data) {
 	}
 }
 
-func (t ftree) Pushr(d Data) FingerTree {
+func (t ftree) Pushr(d Any) FingerTree {
 	if len(t.right) < 4 {
 		return &ftree{
 			t.left,
@@ -197,7 +197,7 @@ func (t ftree) Pushr(d Data) FingerTree {
 
 	var child FingerTree
 	pushdown := &node3{
-		[3]Data{
+		[3]Any{
 			t.right[0],
 			t.right[1],
 			t.right[2],
@@ -208,47 +208,47 @@ func (t ftree) Pushr(d Data) FingerTree {
 
 	return &ftree{
 		t.left,
-		[]Data{t.right[3], d},
+		[]Any{t.right[3], d},
 		child,
 	}
 }
 
 func (t ftree) Iterl(f IterFunc) {
-	t.Foldl(func(_ interface{}, b Data) interface{} {
+	t.Foldl(func(_ Any, b Any) Any {
 		f(b)
 		return nil
 	}, nil)
 }
 
 func (t ftree) Iterr(f IterFunc) {
-	t.Foldr(func(_ interface{}, b Data) interface{} {
+	t.Foldr(func(_ Any, b Any) Any {
 		f(b)
 		return nil
 	}, nil)
 }
 
 type single struct {
-	data Data
+	data Any
 }
 
-func (s single) Foldl(f FoldFunc, initial interface{}) interface{} {
+func (s single) Foldl(f FoldFunc, initial Any) Any {
 	return f(initial, s.data)
 }
 
-func (s single) Foldr(f FoldFunc, initial interface{}) interface{} {
+func (s single) Foldr(f FoldFunc, initial Any) Any {
 	return f(initial, s.data)
 }
 
-func (s single) Pushl(d Data) FingerTree {
-	return &ftree{[]Data{d, s.data}, []Data{}, empty{}}
+func (s single) Pushl(d Any) FingerTree {
+	return &ftree{[]Any{d, s.data}, []Any{}, empty{}}
 }
 
-func (s single) Popl() (FingerTree, Data) {
+func (s single) Popl() (FingerTree, Any) {
 	return &empty{}, s.data
 }
 
-func (s single) Pushr(d Data) FingerTree {
-	return &ftree{[]Data{s.data, d}, []Data{}, empty{}}
+func (s single) Pushr(d Any) FingerTree {
+	return &ftree{[]Any{s.data, d}, []Any{}, empty{}}
 }
 
 func (s single) Iterl(f IterFunc) {
@@ -261,23 +261,23 @@ func (s single) Iterr(f IterFunc) {
 
 type empty struct{}
 
-func (tree empty) Foldl(f FoldFunc, initial interface{}) interface{} {
+func (tree empty) Foldl(f FoldFunc, initial Any) Any {
 	return initial
 }
 
-func (e empty) Foldr(f FoldFunc, initial interface{}) interface{} {
+func (e empty) Foldr(f FoldFunc, initial Any) Any {
 	return initial
 }
 
-func (tree empty) Pushl(d Data) FingerTree {
+func (tree empty) Pushl(d Any) FingerTree {
 	return &single{d}
 }
 
-func (e empty) Popl() (FingerTree, Data) {
+func (e empty) Popl() (FingerTree, Any) {
 	return &empty{}, nil
 }
 
-func (tree empty) Pushr(d Data) FingerTree {
+func (tree empty) Pushr(d Any) FingerTree {
 	return &single{d}
 }
 
@@ -289,9 +289,9 @@ func (e empty) Iterr(f IterFunc) {
 	return
 }
 
-func ToSlice(t FingerTree) []Data {
-	app := func(a interface{}, b Data) interface{} {
-		return append(a.([]Data), b)
+func ToSlice(t FingerTree) []Any {
+	app := func(a Any, b Any) Any {
+		return append(a.([]Any), b)
 	}
-	return t.Foldl(app, make([]Data, 0)).([]Data)
+	return t.Foldl(app, make([]Any, 0)).([]Any)
 }

@@ -57,9 +57,9 @@ func TestNode3ImplementsNode(test *testing.T) {
 }
 
 func TestNode2Foldl(test *testing.T) {
-	n := node2{[2]Data{1, 2}}
-	add := func(a interface{}, b Data) interface{} {
-		return interface{}(a.(int) + b.(int))
+	n := node2{[2]Any{1, 2}}
+	add := func(a Any, b Any) Any {
+		return Any(a.(int) + b.(int))
 	}
 	r := n.Foldl(add, 0)
 	if r != 3 {
@@ -68,9 +68,9 @@ func TestNode2Foldl(test *testing.T) {
 }
 
 func TestNode3Foldl(test *testing.T) {
-	n := node3{[3]Data{1, 2, 3}}
-	add := func(a interface{}, b Data) interface{} {
-		return interface{}(a.(int) + b.(int))
+	n := node3{[3]Any{1, 2, 3}}
+	add := func(a Any, b Any) Any {
+		return Any(a.(int) + b.(int))
 	}
 	r := n.Foldl(add, 0)
 	if r != 6 {
@@ -80,8 +80,8 @@ func TestNode3Foldl(test *testing.T) {
 
 func TestSingleFoldl(test *testing.T) {
 	n := &single{1}
-	add := func(a interface{}, b Data) interface{} {
-		return interface{}(a.(int) + b.(int))
+	add := func(a Any, b Any) Any {
+		return Any(a.(int) + b.(int))
 	}
 	r := n.Foldl(add, 0)
 	if r != 1 {
@@ -91,8 +91,8 @@ func TestSingleFoldl(test *testing.T) {
 
 func TestEmptyFoldl(test *testing.T) {
 	n := &empty{}
-	add := func(a interface{}, b Data) interface{} {
-		return interface{}(a.(int) + b.(int))
+	add := func(a Any, b Any) Any {
+		return Any(a.(int) + b.(int))
 	}
 	r := n.Foldl(add, 0)
 	if r != 0 {
@@ -101,9 +101,9 @@ func TestEmptyFoldl(test *testing.T) {
 }
 
 func TestNode2Foldr(test *testing.T) {
-	n := node2{[2]Data{1, 2}}
-	add := func(a interface{}, b Data) interface{} {
-		return interface{}(a.(int) + b.(int))
+	n := node2{[2]Any{1, 2}}
+	add := func(a Any, b Any) Any {
+		return Any(a.(int) + b.(int))
 	}
 	r := n.Foldr(add, 0)
 	if r != 3 {
@@ -112,9 +112,9 @@ func TestNode2Foldr(test *testing.T) {
 }
 
 func TestNode3Foldr(test *testing.T) {
-	n := node3{[3]Data{1, 2, 3}}
-	add := func(a interface{}, b Data) interface{} {
-		return interface{}(a.(int) + b.(int))
+	n := node3{[3]Any{1, 2, 3}}
+	add := func(a Any, b Any) Any {
+		return Any(a.(int) + b.(int))
 	}
 	r := n.Foldr(add, 0)
 	if r != 6 {
@@ -124,8 +124,8 @@ func TestNode3Foldr(test *testing.T) {
 
 func TestSingleFoldr(test *testing.T) {
 	n := &single{1}
-	add := func(a interface{}, b Data) interface{} {
-		return interface{}(a.(int) + b.(int))
+	add := func(a Any, b Any) Any {
+		return Any(a.(int) + b.(int))
 	}
 	r := n.Foldr(add, 0)
 	if r != 1 {
@@ -135,8 +135,8 @@ func TestSingleFoldr(test *testing.T) {
 
 func TestEmptyFoldr(test *testing.T) {
 	n := &empty{}
-	add := func(a interface{}, b Data) interface{} {
-		return interface{}(a.(int) + b.(int))
+	add := func(a Any, b Any) Any {
+		return Any(a.(int) + b.(int))
 	}
 	r := n.Foldr(add, 0)
 	if r != 0 {
@@ -145,9 +145,9 @@ func TestEmptyFoldr(test *testing.T) {
 }
 
 func TestNode2Iterr(test *testing.T) {
-	n := node2{[2]Data{1, 2}}
+	n := node2{[2]Any{1, 2}}
 	sum := 0
-	add := func(b Data) {
+	add := func(b Any) {
 		sum += b.(int)
 	}
 	n.Iterr(add)
@@ -157,9 +157,9 @@ func TestNode2Iterr(test *testing.T) {
 }
 
 func TestNode3Iterr(test *testing.T) {
-	n := node3{[3]Data{1, 2, 3}}
+	n := node3{[3]Any{1, 2, 3}}
 	sum := 0
-	add := func(b Data) {
+	add := func(b Any) {
 		sum += b.(int)
 	}
 	n.Iterr(add)
@@ -171,7 +171,7 @@ func TestNode3Iterr(test *testing.T) {
 func TestSingleIterr(test *testing.T) {
 	n := &single{1}
 	sum := 0
-	add := func(b Data) {
+	add := func(b Any) {
 		sum += b.(int)
 	}
 	n.Iterr(add)
@@ -183,7 +183,7 @@ func TestSingleIterr(test *testing.T) {
 func TestEmptyIterr(test *testing.T) {
 	n := &empty{}
 	sum := 0
-	add := func(b Data) {
+	add := func(b Any) {
 		sum += b.(int)
 	}
 	n.Iterr(add)
@@ -193,9 +193,9 @@ func TestEmptyIterr(test *testing.T) {
 }
 
 func TestNode2Iterl(test *testing.T) {
-	n := node2{[2]Data{1, 2}}
+	n := node2{[2]Any{1, 2}}
 	sum := 0
-	add := func(b Data) {
+	add := func(b Any) {
 		sum += b.(int)
 	}
 	n.Iterl(add)
@@ -205,9 +205,9 @@ func TestNode2Iterl(test *testing.T) {
 }
 
 func TestNode3Iterl(test *testing.T) {
-	n := node3{[3]Data{1, 2, 3}}
+	n := node3{[3]Any{1, 2, 3}}
 	sum := 0
-	add := func(b Data) {
+	add := func(b Any) {
 		sum += b.(int)
 	}
 	n.Iterl(add)
@@ -219,7 +219,7 @@ func TestNode3Iterl(test *testing.T) {
 func TestSingleIterl(test *testing.T) {
 	n := &single{1}
 	sum := 0
-	add := func(b Data) {
+	add := func(b Any) {
 		sum += b.(int)
 	}
 	n.Iterl(add)
@@ -231,7 +231,7 @@ func TestSingleIterl(test *testing.T) {
 func TestEmptyIterl(test *testing.T) {
 	n := &empty{}
 	sum := 0
-	add := func(b Data) {
+	add := func(b Any) {
 		sum += b.(int)
 	}
 	n.Iterl(add)
@@ -240,7 +240,7 @@ func TestEmptyIterl(test *testing.T) {
 	}
 }
 
-func cmpslices(a, b []Data) bool {
+func cmpslices(a, b []Any) bool {
 	if len(a) != len(b) {
 		fmt.Println("Lengths differ")
 		return false
@@ -256,7 +256,7 @@ func cmpslices(a, b []Data) bool {
 
 func TestEmptyPushl(test *testing.T) {
 	v := empty{}.Pushl(1)
-	if cmpslices(ToSlice(v), []Data{1}) == false {
+	if cmpslices(ToSlice(v), []Any{1}) == false {
 		test.Error(fmt.Sprintf("Expected empty{}.Pushl(1) to result in single{1}, got %v", ToSlice(v)))
 	}
 }
@@ -276,7 +276,7 @@ func TestEmptyPopl(test *testing.T) {
 
 func TestEmptyPushr(test *testing.T) {
 	v := empty{}.Pushr(1)
-	if cmpslices(ToSlice(v), []Data{1}) == false {
+	if cmpslices(ToSlice(v), []Any{1}) == false {
 		test.Error(fmt.Sprintf("Expected empty{}.Pushr(1) to result in single{1}, got %v", ToSlice(v)))
 	}
 }
@@ -284,7 +284,7 @@ func TestEmptyPushr(test *testing.T) {
 func TestSinglePushl(test *testing.T) {
 	n := &single{1}
 	r := n.Pushl(2)
-	if cmpslices(ToSlice(r), []Data{2, 1}) == false {
+	if cmpslices(ToSlice(r), []Any{2, 1}) == false {
 		test.Error(fmt.Sprintf("Expected n.Pushl(2) to result in sequence [2 1], got %v", ToSlice(r)))
 	}
 }
@@ -304,7 +304,7 @@ func TestSinglePopl(test *testing.T) {
 func TestSinglePushr(test *testing.T) {
 	n := &single{1}
 	r := n.Pushr(2)
-	if cmpslices(ToSlice(r), []Data{1, 2}) == false {
+	if cmpslices(ToSlice(r), []Any{1, 2}) == false {
 		test.Error(fmt.Sprintf("Expected n.Pushr(2) to result in sequence [1 2], got %v", ToSlice(r)))
 	}
 }
@@ -315,8 +315,8 @@ func TestFTreeFoldl(test *testing.T) {
 		n = n.Pushl(i)
 	}
 
-	add := func(a interface{}, b Data) interface{} {
-		return interface{}(a.(int) + b.(int))
+	add := func(a Any, b Any) Any {
+		return Any(a.(int) + b.(int))
 	}
 	r := n.Foldl(add, 0)
 	if r != 45 {
@@ -330,8 +330,8 @@ func TestFTreeFoldr(test *testing.T) {
 		n = n.Pushr(i)
 	}
 
-	add := func(a interface{}, b Data) interface{} {
-		return interface{}(a.(int) + b.(int))
+	add := func(a Any, b Any) Any {
+		return Any(a.(int) + b.(int))
 	}
 	r := n.Foldr(add, 0)
 	if r != 45 {
@@ -346,7 +346,7 @@ func TestFTreePushl(test *testing.T) {
 		n = n.Pushl(i)
 	}
 
-	if cmpslices(ToSlice(n), []Data{7, 6, 5, 4, 3, 2, 1, 0}) == false {
+	if cmpslices(ToSlice(n), []Any{7, 6, 5, 4, 3, 2, 1, 0}) == false {
 		test.Error(fmt.Sprintf("Expected push sequence to result in sequence [7 6 5 4 3 2 1 0], got %v", ToSlice(n)))
 	}
 }
@@ -358,7 +358,7 @@ func TestFTreePopl(test *testing.T) {
 		n = n.Pushl(i)
 	}
 
-	var e Data
+	var e Any
 	for i := 19; i >= 0; i-- {
 		n, e = n.Popl()
 		if e != i {
@@ -384,7 +384,7 @@ func TestFTreePushr(test *testing.T) {
 		n = n.Pushr(i)
 	}
 
-	if cmpslices(ToSlice(n), []Data{0, 1, 2, 3, 4, 5, 6, 7}) == false {
+	if cmpslices(ToSlice(n), []Any{0, 1, 2, 3, 4, 5, 6, 7}) == false {
 		test.Error(fmt.Sprintf("Expected push sequence to result in sequence [0 1 2 3 4 5 6 7], got %v", ToSlice(n)))
 	}
 }
@@ -396,7 +396,7 @@ func TestFTreeIterl(test *testing.T) {
 	}
 
 	sum := 0
-	add := func(d Data) {
+	add := func(d Any) {
 		sum += d.(int)
 	}
 	n.Iterl(add)
@@ -412,7 +412,7 @@ func TestFTreeIterr(test *testing.T) {
 	}
 
 	sum := 0
-	add := func(d Data) {
+	add := func(d Any) {
 		sum += d.(int)
 	}
 	n.Iterr(add)
