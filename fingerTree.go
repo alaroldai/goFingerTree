@@ -22,6 +22,9 @@ type FingerTree interface {
 	Pushr(d Any) FingerTree
 
 	Popl() (FingerTree, Any)
+	Headr() Any
+	Tailr() FingerTree
+	IsEmpty() bool
 }
 
 type node interface {
@@ -294,4 +297,12 @@ func ToSlice(t FingerTree) []Any {
 		return append(a.([]Any), b)
 	}
 	return t.Foldl(app, make([]Any, 0)).([]Any)
+}
+
+func ToFingerTree(f Foldable) FingerTree {
+	push := func(tree Any, item Any) Any {
+		return tree.(FingerTree).Pushr(item)
+	}
+
+	return f.Foldl(push, empty{}).(FingerTree)
 }
