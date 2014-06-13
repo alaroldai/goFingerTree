@@ -36,7 +36,7 @@ func buildr(left Slice, m FingerTree, right Slice) FingerTree {
 
 	return &ftree{
 		left,
-		m.Headr().(Sliceable).ToSlice(),
+		m.Headr().(node).ToSlice(),
 		m.Tailr(),
 	}
 }

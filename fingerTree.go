@@ -29,6 +29,7 @@ type FingerTree interface {
 
 type node interface {
 	Foldable
+	Sliceable
 	toDigit() []Any
 }
 
