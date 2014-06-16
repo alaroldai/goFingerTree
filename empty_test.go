@@ -98,3 +98,24 @@ func TestEmptyTailr(test *testing.T) {
 		test.Error(fmt.Sprintf("empty{}.Tailr() should be nil, got %v", v))
 	}
 }
+
+func TestEmptyHeadl(test *testing.T) {
+	v := empty{}.Headl()
+	if v != nil {
+		test.Error(fmt.Sprintf("empty{}.Headl() should be nil, got %v", v))
+	}
+}
+
+func TestEmptyTaill(test *testing.T) {
+	v := empty{}.Taill()
+	if v != nil {
+		test.Error(fmt.Sprintf("empty{}.Tailr() should be nil, got %v", v))
+	}
+}
+
+func TestEmptyIsEmpty(test *testing.T) {
+	v := empty{}
+	if !v.IsEmpty() {
+		test.Error("Expected &empty{}.IsEmpty() to be true")
+	}
+}

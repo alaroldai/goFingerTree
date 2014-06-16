@@ -99,3 +99,24 @@ func TestSingleTailr(test *testing.T) {
 		test.Error(fmt.Sprintf("single{1}.Tailr() should be empty, got %v", v))
 	}
 }
+
+func TestSingleHeadl(test *testing.T) {
+	v := single{1}.Headl()
+	if v != 1 {
+		test.Error(fmt.Sprintf("single{1}.Headl() should be 1, got %v", v))
+	}
+}
+
+func TestSingleTaill(test *testing.T) {
+	v := single{1}.Taill()
+	if v != (empty{}) {
+		test.Error(fmt.Sprintf("single{1}.Taill() should be empty, got %v", v))
+	}
+}
+
+func TestSingleIsEmpty(test *testing.T) {
+	v := &single{1}
+	if v.IsEmpty() {
+		test.Error("Expected &single{1}.IsEmpty() to be false")
+	}
+}

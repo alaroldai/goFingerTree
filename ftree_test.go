@@ -124,7 +124,7 @@ func TestFTreeIterr(test *testing.T) {
 	}
 }
 
-func TestFTreeHeadl(test *testing.T) {
+func TestFTreeHeadr(test *testing.T) {
 	v := ftree{Slice{1}, Slice{2}, empty{}}.Headr()
 	if v != 2 {
 		test.Error(fmt.Sprintf("ftree{1 2}.Headr() should be 2, got %v", v))
@@ -135,7 +135,32 @@ func TestFTreeTailr(test *testing.T) {
 	xs := Slice{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 	t := ToFingerTree(xs).Tailr()
 	ys := ToSlice(t)
-	if !SliceEqual(xs[:len(xs)-1], ys) {
-		test.Error(fmt.Sprintf("ftree{%v}.Tailr() should be %v, got %v", xs, xs[1:], ys))
+	expected := xs[:len(xs)-1]
+	if !SliceEqual(expected, ys) {
+		test.Error(fmt.Sprintf("ftree{%v}.Tailr() should be %v, got %v", xs, expected, ys))
+	}
+}
+
+func TestFTreeHeadl(test *testing.T) {
+	v := ftree{Slice{1}, Slice{2}, empty{}}.Headl()
+	if v != 1 {
+		test.Error(fmt.Sprintf("ftree{1 2}.Headr() should be 1, got %v", v))
+	}
+}
+
+func TestFTreeTaill(test *testing.T) {
+	xs := Slice{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+	t := ToFingerTree(xs).Taill()
+	ys := ToSlice(t)
+	expected := xs[1:]
+	if !SliceEqual(expected, ys) {
+		test.Error(fmt.Sprintf("ftree{%v}.Tailr() should be %v, got %v", xs, expected, ys))
+	}
+}
+
+func TestFTreeIsEmpty(test *testing.T) {
+	v := ToFingerTree(Slice{1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
+	if v.IsEmpty() {
+		test.Error("Expected isEmpty to be false")
 	}
 }

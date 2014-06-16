@@ -10,13 +10,14 @@ type FingerTree interface {
 
 	Popl() (FingerTree, Any)
 
+	Headl() Any
 	Headr() Any
+
+	Taill() FingerTree
 	Tailr() FingerTree
 
 	IsEmpty() bool
 }
-
-
 
 func ToSlice(t FingerTree) Slice {
 	app := func(a Any, b Any) Any {

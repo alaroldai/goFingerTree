@@ -148,6 +148,10 @@ func (t ftree) Headr() Any {
 	return t.right[len(t.right)-1]
 }
 
+func (t ftree) Headl() Any {
+	return t.left[0]
+}
+
 func buildr(left Slice, m FingerTree, right Slice) FingerTree {
 	if len(right) > 0 {
 		return &ftree{left, right, m}
@@ -164,8 +168,28 @@ func buildr(left Slice, m FingerTree, right Slice) FingerTree {
 	}
 }
 
+func buildl(left Slice, m FingerTree, right Slice) FingerTree {
+	if len(left) > 0 {
+		return &ftree{left, right, m}
+	}
+
+	if m.IsEmpty() {
+		return ToFingerTree(right)
+	}
+
+	return &ftree{
+		m.Headl().(node).ToSlice(),
+		right,
+		m.Tailr(),
+	}
+}
+
 func (t ftree) Tailr() FingerTree {
 	return buildr(t.left, t.child, t.right[:len(t.right)-1])
+}
+
+func (t ftree) Taill() FingerTree {
+	return buildl(t.left[1:], t.child, t.right)
 }
 
 func (t ftree) IsEmpty() bool {
