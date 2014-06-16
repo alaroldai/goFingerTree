@@ -1,4 +1,4 @@
-package fingerTree23
+package fingerTree
 
 import (
 	"fmt"

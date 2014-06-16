@@ -1,17 +1,22 @@
-package fingerTree23
+package fingerTree
 
 type Slice []Any
 
+type FoldFunc func(Any, Any) Any
+type Foldable interface {
+    Iterable
+    Foldl(f FoldFunc, initial Any) Any
+    Foldr(f FoldFunc, initial Any) Any
+}
+
+type IterFunc func(Any)
+type Iterable interface {
+    Iterl(IterFunc)
+    Iterr(IterFunc)
+}
+
 type Sliceable interface {
 	ToSlice() Slice
-}
-
-func (n node2) ToSlice() Slice {
-	return n.data[:]
-}
-
-func (n node3) ToSlice() Slice {
-	return n.data[:]
 }
 
 func (s Slice) Foldl(f FoldFunc, init Any) Any {
