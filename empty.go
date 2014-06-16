@@ -18,6 +18,10 @@ func (e empty) Popl() (FingerTree, Any) {
 	return &empty{}, nil
 }
 
+func (e empty) Popr() (FingerTree, Any) {
+	return &empty{}, nil
+}
+
 func (tree empty) Pushr(d Any) FingerTree {
 	return &single{d}
 }

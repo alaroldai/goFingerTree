@@ -9,6 +9,7 @@ type FingerTree interface {
 	Pushr(d Any) FingerTree
 
 	Popl() (FingerTree, Any)
+	Popr() (FingerTree, Any)
 
 	Headl() Any
 	Headr() Any
