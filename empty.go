@@ -54,3 +54,11 @@ func (e empty) Taill() FingerTree {
 func (e empty) IsEmpty() bool {
 	return true
 }
+
+func (e empty) Concatr(t FingerTree) FingerTree {
+	return t
+}
+
+func (e empty) Concatl(t FingerTree) FingerTree {
+	return t
+}

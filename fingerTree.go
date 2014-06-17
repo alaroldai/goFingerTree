@@ -17,6 +17,16 @@ type FingerTree interface {
 	Taill() FingerTree
 	Tailr() FingerTree
 
+	/**
+	 *	Note = t.Concatl(o) means 'concatenate o to the left of t'
+	 *	e.g. (1).Concatl((2)) => (2 1)
+	 *
+	 *	Similarly Concatr:
+	 *	e.g. (1).Concatr((2)) => (1 2)
+	 */
+	Concatl(other FingerTree) FingerTree
+	Concatr(other FingerTree) FingerTree
+
 	IsEmpty() bool
 }
 

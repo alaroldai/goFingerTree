@@ -14,7 +14,7 @@ func TestFTreeImplementsFingerTree(test *testing.T) {
 
 func TestFTreeFoldl(test *testing.T) {
 	var n FingerTree = &empty{}
-	for i := 0; i < 10; i++ {
+	for i := 0; i < 20; i++ {
 		n = n.Pushr(i)
 	}
 
@@ -22,7 +22,7 @@ func TestFTreeFoldl(test *testing.T) {
 		return append(a.(Slice), b)
 	}
 	r := n.Foldl(add, Slice{})
-	expected := Slice{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+	expected := Slice{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19}
 	if !cmpslices(r.(Slice), expected) {
 		test.Error(fmt.Sprintf("Expected n.Foldl to return %v, got %v", expected, r))
 	}
@@ -30,7 +30,7 @@ func TestFTreeFoldl(test *testing.T) {
 
 func TestFTreeFoldr(test *testing.T) {
 	var n FingerTree = &empty{}
-	for i := 0; i < 10; i++ {
+	for i := 0; i < 20; i++ {
 		n = n.Pushl(i)
 	}
 
@@ -38,7 +38,7 @@ func TestFTreeFoldr(test *testing.T) {
 		return append(a.(Slice), b)
 	}
 	r := n.Foldr(add, Slice{})
-	expect := Slice{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+	expect := Slice{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19}
 	if !cmpslices(r.(Slice), expect) {
 		test.Error(fmt.Sprintf("Expected n.Foldl to return %v, got %v", expect, r))
 	}
@@ -47,12 +47,12 @@ func TestFTreeFoldr(test *testing.T) {
 func TestFTreePushl(test *testing.T) {
 	var n FingerTree = &single{0}
 
-	for i := 1; i < 8; i++ {
+	for i := 1; i < 20; i++ {
 		n = n.Pushl(i)
 	}
 
-	if cmpslices(ToSlice(n), []Any{7, 6, 5, 4, 3, 2, 1, 0}) == false {
-		test.Error(fmt.Sprintf("Expected push sequence to result in sequence [7 6 5 4 3 2 1 0], got %v", ToSlice(n)))
+	if cmpslices(ToSlice(n), Slice{19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0}) == false {
+		test.Error(fmt.Sprintf("Expected push sequence to result in sequence [19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0], got %v", ToSlice(n)))
 	}
 }
 
@@ -199,5 +199,57 @@ func TestFTreeIsEmpty(test *testing.T) {
 	v := ToFingerTree(Slice{1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
 	if v.IsEmpty() {
 		test.Error("Expected isEmpty to be false")
+	}
+}
+
+func TestFTreeConcatl(test *testing.T) {
+	e := &empty{}
+	s := e.Pushl(1)
+	t := s.Pushl(2)
+	o := (&empty{}).Pushl(3).Pushl(4)
+
+	expected := append(ToSlice(o), ToSlice(t)...)
+	r := t.Concatl(o)
+	if !cmpslices(expected, ToSlice(r)) {
+		test.Error(fmt.Sprintf("Expected t.Concatl to return %v, got %v", expected, ToSlice(r)))
+	}
+
+	expected = append(ToSlice(s), ToSlice(t)...)
+	r = t.Concatl(s)
+	if !cmpslices(expected, ToSlice(r)) {
+		test.Error(fmt.Sprintf("Expected t.Concatl to return %v, got %v", expected, ToSlice(r)))
+	}
+
+	expected = append(ToSlice(e), ToSlice(t)...)
+	r = t.Concatl(e)
+	if !cmpslices(expected, ToSlice(r)) {
+		test.Error(fmt.Sprintf("Expected t.Concatl to return %v, got %v", expected, ToSlice(r)))
+	}
+}
+
+func TestFTreeConcatr(test *testing.T) {
+	e := &empty{}
+	s := e.Pushl(1)
+	t := s.Pushl(2)
+	o := (&empty{}).Pushl(3).Pushl(4)
+
+	fmt.Printf("%v -> %v -> %v : %v\n", e, s, t, o)
+
+	expected := append(ToSlice(t), ToSlice(o)...)
+	r := t.Concatr(o)
+	if !cmpslices(expected, ToSlice(r)) {
+		test.Error(fmt.Sprintf("Expected t.Concatr to return %v, got %v", expected, ToSlice(r)))
+	}
+
+	expected = append(ToSlice(t), ToSlice(s)...)
+	r = t.Concatr(s)
+	if !cmpslices(expected, ToSlice(r)) {
+		test.Error(fmt.Sprintf("Expected t.Concatr to return %v, got %v", expected, ToSlice(r)))
+	}
+
+	expected = append(ToSlice(t), ToSlice(e)...)
+	r = t.Concatr(e)
+	if !cmpslices(expected, ToSlice(r)) {
+		test.Error(fmt.Sprintf("Expected t.Concatr to return %v, got %v", expected, ToSlice(r)))
 	}
 }

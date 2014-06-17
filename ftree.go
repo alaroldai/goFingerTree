@@ -155,3 +155,30 @@ func (t ftree) Taill() FingerTree {
 func (t ftree) IsEmpty() bool {
 	return false
 }
+
+func (t ftree) Concatr(other FingerTree) FingerTree {
+	otherAsFtreePtr, isFTreePtr := other.(*ftree)
+	otherAsFtreeStruct, isFTreeStruct := other.(ftree)
+	if !isFTreePtr && !isFTreeStruct {
+		return other.Concatl(t)
+	}
+
+	concatr := func(o *ftree) FingerTree {
+		return o
+	}
+
+	if isFTreePtr {
+		return concatr(otherAsFtreePtr)
+	}
+	return concatr(&otherAsFtreeStruct)
+}
+
+func (t ftree) Concatl(other FingerTree) FingerTree {
+	_, isFTreePtr := other.(*ftree)
+	_, isFTreeStruct := other.(ftree)
+	if !isFTreePtr && !isFTreeStruct {
+		return other.Concatr(t)
+	}
+
+	return other.Concatr(&t)
+}
