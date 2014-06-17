@@ -56,51 +56,11 @@ func (t ftree) Pushl(d Any) FingerTree {
 }
 
 func (t ftree) Popl() (FingerTree, Any) {
-	if len(t.left) > 1 {
-		return &ftree{
-				t.left[1:],
-				t.right,
-				t.child,
-			},
-			t.left[0]
-	}
+	return t.Taill(), t.Headl()
+}
 
-	nc, p := t.child.Popl()
-
-	if p == nil {
-		lright := len(t.right)
-		if lright == 0 {
-			return &empty{}, t.left[0]
-		}
-		if lright == 1 {
-			return &single{t.right[0]}, t.left[0]
-		}
-		if lright == 2 || lright == 3 {
-			return &ftree{
-					t.right[:1],
-					t.right[1:],
-					&empty{},
-				},
-				t.left[0]
-		}
-		if lright == 4 {
-			return &ftree{
-					t.right[:2],
-					t.right[2:],
-					&empty{},
-				},
-				t.left[0]
-		}
-
-		panic("Invalid number of elements in right branch")
-	} else {
-		return &ftree{
-				p.(node).ToSlice(),
-				t.right,
-				nc,
-			},
-			t.left[0]
-	}
+func (t ftree) Popr() (FingerTree, Any) {
+	return t.Tailr(), t.Headr()
 }
 
 func (t ftree) Pushr(d Any) FingerTree {
@@ -180,7 +140,7 @@ func buildl(left Slice, m FingerTree, right Slice) FingerTree {
 	return &ftree{
 		m.Headl().(node).ToSlice(),
 		right,
-		m.Tailr(),
+		m.Taill(),
 	}
 }
 

@@ -15,22 +15,22 @@ func TestEmptyImplementsFingerTree(test *testing.T) {
 func TestEmptyFoldl(test *testing.T) {
 	n := &empty{}
 	add := func(a Any, b Any) Any {
-		return Any(a.(int) + b.(int))
+		return append(a.(Slice), b)
 	}
-	r := n.Foldl(add, 0)
-	if r != 0 {
-		test.Error("Expected n.Foldl to return 0, got " + string(r.(int)))
+	r := n.Foldl(add, Slice{})
+	if !cmpslices(r.(Slice), Slice{}) {
+		test.Error(fmt.Sprintf("Expected n.Foldl to return %v, got %v", Slice{}, r))
 	}
 }
 
 func TestEmptyFoldr(test *testing.T) {
 	n := &empty{}
 	add := func(a Any, b Any) Any {
-		return Any(a.(int) + b.(int))
+		return append(a.(Slice), b)
 	}
-	r := n.Foldr(add, 0)
-	if r != 0 {
-		test.Error("Expected n.Foldr to return 0, got " + string(r.(int)))
+	r := n.Foldr(add, Slice{})
+	if !cmpslices(r.(Slice), Slice{}) {
+		test.Error(fmt.Sprintf("Expected n.Foldl to return %v, got %v", Slice{}, r))
 	}
 }
 

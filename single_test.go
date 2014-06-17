@@ -43,22 +43,22 @@ func TestSingleImplementsFingerTree(test *testing.T) {
 func TestSingleFoldl(test *testing.T) {
 	n := &single{1}
 	add := func(a Any, b Any) Any {
-		return Any(a.(int) + b.(int))
+		return append(a.(Slice), b)
 	}
-	r := n.Foldl(add, 0)
-	if r != 1 {
-		test.Error("Expected n.Foldl to return 1, got " + string(r.(int)))
+	r := n.Foldl(add, Slice{})
+	if !cmpslices(r.(Slice), Slice{1}) {
+		test.Error(fmt.Sprintf("Expected n.Foldl to return %v, got %v", Slice{1}, r))
 	}
 }
 
 func TestSingleFoldr(test *testing.T) {
 	n := &single{1}
 	add := func(a Any, b Any) Any {
-		return Any(a.(int) + b.(int))
+		return append(a.(Slice), b)
 	}
-	r := n.Foldr(add, 0)
-	if r != 1 {
-		test.Error("Expected n.Foldr to return 1, got " + string(r.(int)))
+	r := n.Foldr(add, Slice{})
+	if !cmpslices(r.(Slice), Slice{1}) {
+		test.Error(fmt.Sprintf("Expected n.Foldr to return %v, got %v", Slice{1}, r))
 	}
 }
 
