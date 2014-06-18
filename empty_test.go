@@ -78,6 +78,19 @@ func TestEmptyPopl(test *testing.T) {
 	}
 }
 
+func TestEmptyPopr(test *testing.T) {
+	n := empty{}
+	r, e := n.Popr()
+
+	_, isEmpty := r.(*empty)
+	if !isEmpty {
+		test.Error(fmt.Sprintf("Expected n.Popr() result to be an empty node, got %v", r))
+	}
+	if e != nil {
+		test.Error("Expected n.Popr() result to be nil")
+	}
+}
+
 func TestEmptyPushr(test *testing.T) {
 	v := empty{}.Pushr(1)
 	if cmpslices(ToSlice(v), []Any{1}) == false {
