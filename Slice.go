@@ -4,15 +4,15 @@ type Slice []Any
 
 type FoldFunc func(Any, Any) Any
 type Foldable interface {
-    Iterable
-    Foldl(f FoldFunc, initial Any) Any
-    Foldr(f FoldFunc, initial Any) Any
+	Iterable
+	Foldl(f FoldFunc, initial Any) Any
+	Foldr(f FoldFunc, initial Any) Any
 }
 
 type IterFunc func(Any)
 type Iterable interface {
-    Iterl(IterFunc)
-    Iterr(IterFunc)
+	Iterl(IterFunc)
+	Iterr(IterFunc)
 }
 
 type Sliceable interface {
@@ -30,7 +30,7 @@ func (s Slice) Foldl(f FoldFunc, init Any) Any {
 func (s Slice) Foldr(f FoldFunc, init Any) Any {
 	var v = init
 	for i := range s {
-		v = f(v, s[len(s)-1 - i])
+		v = f(v, s[len(s)-1-i])
 	}
 	return v
 }
@@ -57,4 +57,8 @@ func SliceEqual(a, b Slice) bool {
 		}
 	}
 	return true
+}
+
+func (s Slice) ToSlice() Slice {
+	return s
 }

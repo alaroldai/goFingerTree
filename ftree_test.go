@@ -205,51 +205,133 @@ func TestFTreeIsEmpty(test *testing.T) {
 func TestFTreeConcatl(test *testing.T) {
 	e := &empty{}
 	s := e.Pushl(1)
-	t := s.Pushl(2)
-	o := (&empty{}).Pushl(3).Pushl(4)
-
-	expected := append(ToSlice(o), ToSlice(t)...)
-	r := t.Concatl(o)
-	if !cmpslices(expected, ToSlice(r)) {
-		test.Error(fmt.Sprintf("Expected t.Concatl to return %v, got %v", expected, ToSlice(r)))
+	var t FingerTree = &empty{}
+	for i := 0; i < 25; i++ {
+		t = t.Pushl(i)
 	}
 
-	expected = append(ToSlice(s), ToSlice(t)...)
-	r = t.Concatl(s)
-	if !cmpslices(expected, ToSlice(r)) {
-		test.Error(fmt.Sprintf("Expected t.Concatl to return %v, got %v", expected, ToSlice(r)))
+	var o FingerTree = &empty{}
+	for i := 0; i < 5; i++ {
+		o = o.Pushl(i)
 	}
 
-	expected = append(ToSlice(e), ToSlice(t)...)
-	r = t.Concatl(e)
-	if !cmpslices(expected, ToSlice(r)) {
-		test.Error(fmt.Sprintf("Expected t.Concatl to return %v, got %v", expected, ToSlice(r)))
+	testCombinations := func() {
+
+		expected := append(ToSlice(o), ToSlice(t)...)
+		r := t.Concatl(o)
+		if !cmpslices(expected, ToSlice(r)) {
+			test.Error(fmt.Sprintf("Expected t.Concatl to return %v, got %v", expected, ToSlice(r)))
+		}
+
+		expected = append(ToSlice(s), ToSlice(t)...)
+		r = t.Concatl(s)
+		if !cmpslices(expected, ToSlice(r)) {
+			test.Error(fmt.Sprintf("Expected t.Concatl to return %v, got %v", expected, ToSlice(r)))
+		}
+
+		expected = append(ToSlice(e), ToSlice(t)...)
+		r = t.Concatl(e)
+		if !cmpslices(expected, ToSlice(r)) {
+			test.Error(fmt.Sprintf("Expected t.Concatl to return %v, got %v", expected, ToSlice(r)))
+		}
 	}
+
+	testCombinations()
+
+	t = &empty{}
+	o = &empty{}
+	for i := 0; i < 5; i++ {
+		t = t.Pushl(i)
+	}
+	for i := 0; i < 25; i++ {
+		o = o.Pushl(i)
+	}
+	testCombinations()
+
+	t = &empty{}
+	o = &empty{}
+	for i := 0; i < 25; i++ {
+		t = t.Pushl(i)
+	}
+	for i := 0; i < 105; i++ {
+		o = o.Pushl(i)
+	}
+	testCombinations()
+
+	t = &empty{}
+	o = &empty{}
+	for i := 0; i < 105; i++ {
+		t = t.Pushl(i)
+	}
+	for i := 0; i < 25; i++ {
+		o = o.Pushl(i)
+	}
+	testCombinations()
 }
 
 func TestFTreeConcatr(test *testing.T) {
 	e := &empty{}
-	s := e.Pushl(1)
-	t := s.Pushl(2)
-	o := (&empty{}).Pushl(3).Pushl(4)
-
-	fmt.Printf("%v -> %v -> %v : %v\n", e, s, t, o)
-
-	expected := append(ToSlice(t), ToSlice(o)...)
-	r := t.Concatr(o)
-	if !cmpslices(expected, ToSlice(r)) {
-		test.Error(fmt.Sprintf("Expected t.Concatr to return %v, got %v", expected, ToSlice(r)))
+	s := e.Pushr(1)
+	var t FingerTree = &empty{}
+	for i := 0; i < 25; i++ {
+		t = t.Pushr(i)
 	}
 
-	expected = append(ToSlice(t), ToSlice(s)...)
-	r = t.Concatr(s)
-	if !cmpslices(expected, ToSlice(r)) {
-		test.Error(fmt.Sprintf("Expected t.Concatr to return %v, got %v", expected, ToSlice(r)))
+	var o FingerTree = &empty{}
+	for i := 0; i < 5; i++ {
+		o = o.Pushr(i)
 	}
 
-	expected = append(ToSlice(t), ToSlice(e)...)
-	r = t.Concatr(e)
-	if !cmpslices(expected, ToSlice(r)) {
-		test.Error(fmt.Sprintf("Expected t.Concatr to return %v, got %v", expected, ToSlice(r)))
+	testCombinations := func() {
+
+		expected := append(ToSlice(t), ToSlice(o)...)
+		r := t.Concatr(o)
+		if !cmpslices(expected, ToSlice(r)) {
+			test.Error(fmt.Sprintf("Expected t.Concatr to return %v, got %v", expected, ToSlice(r)))
+		}
+
+		expected = append(ToSlice(t), ToSlice(s)...)
+		r = t.Concatr(s)
+		if !cmpslices(expected, ToSlice(r)) {
+			test.Error(fmt.Sprintf("Expected t.Concatr to return %v, got %v", expected, ToSlice(r)))
+		}
+
+		expected = append(ToSlice(t), ToSlice(e)...)
+		r = t.Concatr(e)
+		if !cmpslices(expected, ToSlice(r)) {
+			test.Error(fmt.Sprintf("Expected t.Concatr to return %v, got %v", expected, ToSlice(r)))
+		}
 	}
+
+	testCombinations()
+
+	t = &empty{}
+	o = &empty{}
+	for i := 0; i < 5; i++ {
+		t = t.Pushr(i)
+	}
+	for i := 0; i < 25; i++ {
+		o = o.Pushr(i)
+	}
+	testCombinations()
+
+	t = &empty{}
+	o = &empty{}
+	for i := 0; i < 25; i++ {
+		t = t.Pushr(i)
+	}
+	for i := 0; i < 105; i++ {
+		o = o.Pushr(i)
+	}
+	testCombinations()
+
+	t = &empty{}
+	o = &empty{}
+	for i := 0; i < 105; i++ {
+		t = t.Pushr(i)
+	}
+	for i := 0; i < 25; i++ {
+		o = o.Pushr(i)
+	}
+	testCombinations()
 }

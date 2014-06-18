@@ -152,8 +152,6 @@ func TestSingleConcatr(test *testing.T) {
 	t := s.Pushl(2)
 	o := (&empty{}).Pushl(3)
 
-	fmt.Printf("%v -> %v -> %v : %v\n", e, s, t, o)
-
 	expected := append(ToSlice(s), ToSlice(t)...)
 	r := s.Concatr(t)
 	if !cmpslices(expected, ToSlice(r)) {
