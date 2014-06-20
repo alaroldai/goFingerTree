@@ -34,20 +34,21 @@ func glue(l FingerTree, c Slice, r FingerTree) FingerTree {
 
 	pushl := func(a FingerTree, s Slice) FingerTree {
 		m := a
-		for i, _ := range s {
-			m = m.Pushl(s[len(s)-i-1])
-		}
+		s.Iterr(func(t Any) {
+			m = m.Pushl(t)
+		})
 		return m
 	}
 
 	pushr := func(a FingerTree, s Slice) FingerTree {
 		m := a
-		for _, t := range s {
+		s.Iterl(func(t Any) {
 			m = m.Pushr(t)
-		}
+		})
 		return m
 	}
 
+	// If either branch is empty, it can be ignored
 	if l.IsEmpty() {
 		return pushl(r, c)
 	}
@@ -55,23 +56,23 @@ func glue(l FingerTree, c Slice, r FingerTree) FingerTree {
 		return pushr(l, c)
 	}
 
+	// If either branch is a single, glue reduces to pushl/pushr
 	s, succ := l.(*single)
-
 	if succ {
 		return pushl(r, c).Pushl(s.data)
 	}
-
 	s, succ = r.(*single)
-
 	if succ {
 		return pushr(l, c).Pushr(s.data)
 	}
 
-	nl := l.(*ftree).left
-	nr := r.(*ftree).right
-	ns := nodes(append(append(l.(*ftree).right, c...), r.(*ftree).left...))
-	nc := glue(l.(*ftree).child, ns, r.(*ftree).child)
-	return &ftree{nl, nr, nc}
+	// Otherwise, both branches are trees. We proceed recursively:
+	lt, _ := l.(*ftree)
+	rt, _ := r.(*ftree)
+
+	ns := nodes(append(append(lt.right, c...), rt.left...))
+	nc := glue(lt.child, ns, rt.child)
+	return &ftree{lt.left, rt.right, nc}
 }
 
 /**
@@ -248,11 +249,5 @@ func (t ftree) Concatr(other FingerTree) FingerTree {
 }
 
 func (t ftree) Concatl(other FingerTree) FingerTree {
-	_, isFTreePtr := other.(*ftree)
-	_, isFTreeStruct := other.(ftree)
-	if !isFTreePtr && !isFTreeStruct {
-		return other.Concatr(t)
-	}
-
-	return other.Concatr(&t)
+	return other.Concatr(t)
 }
