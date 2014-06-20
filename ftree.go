@@ -1,5 +1,83 @@
 package fingerTree
 
+/**
+ *	Utility functions
+ */
+
+/**
+ *	Transform a slice of elements into a slice of nodes
+ */
+func nodes(xs Slice) Slice {
+	if len(xs) == 1 {
+		return Slice{&node2{[2]Any{xs[0], nil}}}
+	}
+	if len(xs) == 2 {
+		return Slice{&node2{[2]Any{xs[0], xs[1]}}}
+	}
+	if len(xs) == 3 {
+		return Slice{&node3{[3]Any{xs[0], xs[1], xs[2]}}}
+	}
+	if len(xs) == 4 {
+		return Slice{&node2{[2]Any{xs[0], xs[1]}}, &node2{[2]Any{xs[2], xs[3]}}}
+	}
+	if len(xs) > 4 {
+		return append(nodes(xs[:3]), nodes(xs[3:])...)
+	}
+	return Slice{}
+}
+
+/**
+ *	Join two finger trees with a 'glue' slice between them
+ *	Normally calling Concatr or Concatl will be more useful
+ */
+func glue(l FingerTree, c Slice, r FingerTree) FingerTree {
+
+	pushl := func(a FingerTree, s Slice) FingerTree {
+		m := a
+		for i, _ := range s {
+			m = m.Pushl(s[len(s)-i-1])
+		}
+		return m
+	}
+
+	pushr := func(a FingerTree, s Slice) FingerTree {
+		m := a
+		for _, t := range s {
+			m = m.Pushr(t)
+		}
+		return m
+	}
+
+	if l.IsEmpty() {
+		return pushl(r, c)
+	}
+	if r.IsEmpty() {
+		return pushr(l, c)
+	}
+
+	s, succ := l.(*single)
+
+	if succ {
+		return pushl(r, c).Pushl(s.data)
+	}
+
+	s, succ = r.(*single)
+
+	if succ {
+		return pushr(l, c).Pushr(s.data)
+	}
+
+	nl := l.(*ftree).left
+	nr := r.(*ftree).right
+	ns := nodes(append(append(l.(*ftree).right, c...), r.(*ftree).left...))
+	nc := glue(l.(*ftree).child, ns, r.(*ftree).child)
+	return &ftree{nl, nr, nc}
+}
+
+/**
+ *	ftree structure
+ */
+
 type ftree struct {
 	left  Slice
 	right Slice
@@ -163,80 +241,10 @@ func (t ftree) Concatr(other FingerTree) FingerTree {
 		return other.Concatl(t)
 	}
 
-	concatr := func(o *ftree) FingerTree {
-
-		var nodes func(Slice) Slice
-		nodes = func(xs Slice) Slice {
-			if len(xs) == 1 {
-				return Slice{&node2{[2]Any{xs[0], nil}}}
-			}
-			if len(xs) == 2 {
-				return Slice{&node2{[2]Any{xs[0], xs[1]}}}
-			}
-			if len(xs) == 3 {
-				return Slice{&node3{[3]Any{xs[0], xs[1], xs[2]}}}
-			}
-			if len(xs) == 4 {
-				return Slice{&node2{[2]Any{xs[0], xs[1]}}, &node2{[2]Any{xs[2], xs[3]}}}
-			}
-			if len(xs) > 4 {
-				return append(nodes(xs[:3]), nodes(xs[3:])...)
-			}
-			return Slice{}
-		}
-
-		var app3 func(FingerTree, Slice, FingerTree) FingerTree
-		app3 = func(l FingerTree, c Slice, r FingerTree) FingerTree {
-
-			if l.IsEmpty() {
-				m := r
-				for i, _ := range c {
-					m = m.Pushl(c[len(c)-i-1])
-				}
-				return m
-			}
-			if r.IsEmpty() {
-				m := l
-				for _, t := range c {
-					m = m.Pushr(t)
-				}
-				return m
-			}
-
-			s, succ := l.(*single)
-
-			if succ {
-				m := r
-				for i, _ := range c {
-					m = m.Pushl(c[len(c)-i-1])
-				}
-				return m.Pushl(s.data)
-			}
-
-			s, succ = r.(*single)
-
-			if succ {
-				m := l
-				for _, t := range c {
-					m = m.Pushr(t)
-				}
-				return m.Pushr(s.data)
-			}
-
-			nl := l.(*ftree).left
-			nr := r.(*ftree).right
-			ns := nodes(append(append(l.(*ftree).right, c...), r.(*ftree).left...))
-			nc := app3(l.(*ftree).child, ns, r.(*ftree).child)
-			return &ftree{nl, nr, nc}
-		}
-
-		return app3(&t, Slice{}, o)
-	}
-
 	if isFTreePtr {
-		return concatr(otherAsFtreePtr)
+		return glue(&t, Slice{}, otherAsFtreePtr)
 	}
-	return concatr(&otherAsFtreeStruct)
+	return glue(&t, Slice{}, &otherAsFtreeStruct)
 }
 
 func (t ftree) Concatl(other FingerTree) FingerTree {
