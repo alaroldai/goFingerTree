@@ -1,4 +1,4 @@
 goFingerTree
 ============
 
-2-3-Finger tree implementation in Go
+2-3-Finger tree implementation in Go/Golang
