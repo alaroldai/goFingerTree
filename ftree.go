@@ -9,7 +9,7 @@ package fingerTree
  */
 func nodes(xs Slice) Slice {
 	if len(xs) == 1 {
-		return Slice{&node2{[2]Any{xs[0], nil}}}
+		panic("Can't make a node from a single element.")
 	}
 	if len(xs) == 2 {
 		return Slice{&node2{[2]Any{xs[0], xs[1]}}}
