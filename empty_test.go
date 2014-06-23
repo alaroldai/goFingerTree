@@ -78,6 +78,19 @@ func TestEmptyPopl(test *testing.T) {
 	}
 }
 
+func TestEmptyPopr(test *testing.T) {
+	n := empty{}
+	r, e := n.Popr()
+
+	_, isEmpty := r.(*empty)
+	if !isEmpty {
+		test.Error(fmt.Sprintf("Expected n.Popr() result to be an empty node, got %v", r))
+	}
+	if e != nil {
+		test.Error("Expected n.Popr() result to be nil")
+	}
+}
+
 func TestEmptyPushr(test *testing.T) {
 	v := empty{}.Pushr(1)
 	if cmpslices(ToSlice(v), []Any{1}) == false {
@@ -117,5 +130,45 @@ func TestEmptyIsEmpty(test *testing.T) {
 	v := empty{}
 	if !v.IsEmpty() {
 		test.Error("Expected &empty{}.IsEmpty() to be true")
+	}
+}
+
+func TestEmptyConcatl(test *testing.T) {
+	e := &empty{}
+	s := e.Pushl(1)
+	t := s.Pushl(2)
+
+	o := &empty{}
+
+	if !cmpslices(ToSlice(t), ToSlice(e.Concatl(t))) {
+		test.Error(fmt.Sprintf("Expected e.Concatl to return %v, got %v", ToSlice(t), ToSlice(e.Concatl(t))))
+	}
+
+	if !cmpslices(ToSlice(s), ToSlice(e.Concatl(s))) {
+		test.Error(fmt.Sprintf("Expected e.Concatl to return %v, got %v", ToSlice(s), ToSlice(e.Concatl(s))))
+	}
+
+	if !cmpslices(ToSlice(o), ToSlice(e.Concatl(o))) {
+		test.Error(fmt.Sprintf("Expected e.Concatl to return %v, got %v", ToSlice(o), ToSlice(e.Concatl(o))))
+	}
+}
+
+func TestEmptyConcatr(test *testing.T) {
+	e := &empty{}
+	s := e.Pushl(1)
+	t := s.Pushl(2)
+
+	o := e
+
+	if !cmpslices(ToSlice(t), ToSlice(e.Concatr(t))) {
+		test.Error(fmt.Sprintf("Expected e.Concatr to return %v, got %v", ToSlice(t), ToSlice(e.Concatr(t))))
+	}
+
+	if !cmpslices(ToSlice(s), ToSlice(e.Concatr(s))) {
+		test.Error(fmt.Sprintf("Expected e.Concatr to return %v, got %v", ToSlice(s), ToSlice(e.Concatr(s))))
+	}
+
+	if !cmpslices(ToSlice(o), ToSlice(e.Concatr(o))) {
+		test.Error(fmt.Sprintf("Expected e.Concatr to return %v, got %v", ToSlice(o), ToSlice(e.Concatr(o))))
 	}
 }

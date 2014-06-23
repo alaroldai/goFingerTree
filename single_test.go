@@ -120,3 +120,53 @@ func TestSingleIsEmpty(test *testing.T) {
 		test.Error("Expected &single{1}.IsEmpty() to be false")
 	}
 }
+
+func TestSingleConcatl(test *testing.T) {
+	e := &empty{}
+	s := e.Pushl(1)
+	t := s.Pushl(2)
+	o := (&empty{}).Pushl(3)
+
+	expected := append(ToSlice(t), ToSlice(s)...)
+	r := s.Concatl(t)
+	if !cmpslices(expected, ToSlice(r)) {
+		test.Error(fmt.Sprintf("Expected s.Concatl to return %v, got %v", expected, ToSlice(s.Concatl(t))))
+	}
+
+	expected = append(ToSlice(o), ToSlice(s)...)
+	r = s.Concatl(o)
+	if !cmpslices(expected, ToSlice(r)) {
+		test.Error(fmt.Sprintf("Expected s.Concatl to return %v, got %v", expected, ToSlice(s.Concatl(o))))
+	}
+
+	expected = append(ToSlice(e), ToSlice(s)...)
+	r = s.Concatl(e)
+	if !cmpslices(expected, ToSlice(r)) {
+		test.Error(fmt.Sprintf("Expected s.Concatl to return %v, got %v", expected, ToSlice(s.Concatl(e))))
+	}
+}
+
+func TestSingleConcatr(test *testing.T) {
+	e := &empty{}
+	s := e.Pushl(1)
+	t := s.Pushl(2)
+	o := (&empty{}).Pushl(3)
+
+	expected := append(ToSlice(s), ToSlice(t)...)
+	r := s.Concatr(t)
+	if !cmpslices(expected, ToSlice(r)) {
+		test.Error(fmt.Sprintf("Expected s.Concatr to return %v, got %v", expected, ToSlice(s.Concatr(t))))
+	}
+
+	expected = append(ToSlice(s), ToSlice(o)...)
+	r = s.Concatr(o)
+	if !cmpslices(expected, ToSlice(r)) {
+		test.Error(fmt.Sprintf("Expected s.Concatr to return %v, got %v", expected, ToSlice(s.Concatr(o))))
+	}
+
+	expected = append(ToSlice(s), ToSlice(e)...)
+	r = s.Concatr(e)
+	if !cmpslices(expected, ToSlice(r)) {
+		test.Error(fmt.Sprintf("Expected s.Concatr to return %v, got %v", expected, ToSlice(s.Concatr(e))))
+	}
+}

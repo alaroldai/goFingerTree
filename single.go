@@ -55,3 +55,12 @@ func (s single) Taill() FingerTree {
 func (s single) IsEmpty() bool {
 	return false
 }
+
+// Concat t to the right of the receiver
+func (s single) Concatr(t FingerTree) FingerTree {
+	return t.Pushl(s.data)
+}
+
+func (s single) Concatl(t FingerTree) FingerTree {
+	return t.Pushr(s.data)
+}
