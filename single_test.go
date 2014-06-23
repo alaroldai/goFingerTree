@@ -35,7 +35,7 @@ func TestSinglePushr(test *testing.T) {
 }
 
 func TestSingleImplementsFingerTree(test *testing.T) {
-	stype := reflect.TypeOf(single{})
+	stype := reflect.TypeOf(&single{})
 	itype := reflect.TypeOf((*FingerTree)(nil)).Elem()
 	TypeConformityTest(test, stype, itype)
 }
@@ -87,29 +87,29 @@ func TestSingleIterl(test *testing.T) {
 }
 
 func TestSingleHeadr(test *testing.T) {
-	v := single{1}.Headr()
+	v := (&single{1}).Headr()
 	if v != 1 {
 		test.Error(fmt.Sprintf("single{1}.Headr() should be 1, got %v", v))
 	}
 }
 
 func TestSingleTailr(test *testing.T) {
-	v := single{1}.Tailr()
-	if v != (empty{}) {
+	v := (&single{1}).Tailr()
+	if !v.IsEmpty() {
 		test.Error(fmt.Sprintf("single{1}.Tailr() should be empty, got %v", v))
 	}
 }
 
 func TestSingleHeadl(test *testing.T) {
-	v := single{1}.Headl()
+	v := (&single{1}).Headl()
 	if v != 1 {
 		test.Error(fmt.Sprintf("single{1}.Headl() should be 1, got %v", v))
 	}
 }
 
 func TestSingleTaill(test *testing.T) {
-	v := single{1}.Taill()
-	if v != (empty{}) {
+	v := (&single{1}).Taill()
+	if !v.IsEmpty() {
 		test.Error(fmt.Sprintf("single{1}.Taill() should be empty, got %v", v))
 	}
 }

@@ -7,7 +7,7 @@ import (
 )
 
 func TestEmptyImplementsFingerTree(test *testing.T) {
-	stype := reflect.TypeOf(empty{})
+	stype := reflect.TypeOf(&empty{})
 	itype := reflect.TypeOf((*FingerTree)(nil)).Elem()
 	TypeConformityTest(test, stype, itype)
 }
@@ -59,14 +59,14 @@ func TestEmptyIterl(test *testing.T) {
 }
 
 func TestEmptyPushl(test *testing.T) {
-	v := empty{}.Pushl(1)
+	v := (&empty{}).Pushl(1)
 	if cmpslices(ToSlice(v), []Any{1}) == false {
 		test.Error(fmt.Sprintf("Expected empty{}.Pushl(1) to result in single{1}, got %v", ToSlice(v)))
 	}
 }
 
 func TestEmptyPopl(test *testing.T) {
-	n := empty{}
+	n := &empty{}
 	r, e := n.Popl()
 
 	_, isEmpty := r.(*empty)
@@ -79,7 +79,7 @@ func TestEmptyPopl(test *testing.T) {
 }
 
 func TestEmptyPopr(test *testing.T) {
-	n := empty{}
+	n := &empty{}
 	r, e := n.Popr()
 
 	_, isEmpty := r.(*empty)
@@ -92,42 +92,42 @@ func TestEmptyPopr(test *testing.T) {
 }
 
 func TestEmptyPushr(test *testing.T) {
-	v := empty{}.Pushr(1)
+	v := (&empty{}).Pushr(1)
 	if cmpslices(ToSlice(v), []Any{1}) == false {
 		test.Error(fmt.Sprintf("Expected empty{}.Pushr(1) to result in single{1}, got %v", ToSlice(v)))
 	}
 }
 
 func TestEmptyHeadr(test *testing.T) {
-	v := empty{}.Headr()
+	v := (&empty{}).Headr()
 	if v != nil {
 		test.Error(fmt.Sprintf("empty{}.Headl() should be nil, got %v", v))
 	}
 }
 
 func TestEmptyTailr(test *testing.T) {
-	v := empty{}.Tailr()
+	v := (&empty{}).Tailr()
 	if v != nil {
 		test.Error(fmt.Sprintf("empty{}.Tailr() should be nil, got %v", v))
 	}
 }
 
 func TestEmptyHeadl(test *testing.T) {
-	v := empty{}.Headl()
+	v := (&empty{}).Headl()
 	if v != nil {
 		test.Error(fmt.Sprintf("empty{}.Headl() should be nil, got %v", v))
 	}
 }
 
 func TestEmptyTaill(test *testing.T) {
-	v := empty{}.Taill()
+	v := (&empty{}).Taill()
 	if v != nil {
 		test.Error(fmt.Sprintf("empty{}.Tailr() should be nil, got %v", v))
 	}
 }
 
 func TestEmptyIsEmpty(test *testing.T) {
-	v := empty{}
+	v := &empty{}
 	if !v.IsEmpty() {
 		test.Error("Expected &empty{}.IsEmpty() to be true")
 	}

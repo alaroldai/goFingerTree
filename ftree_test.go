@@ -7,7 +7,7 @@ import (
 )
 
 func TestFTreeImplementsFingerTree(test *testing.T) {
-	stype := reflect.TypeOf(ftree{})
+	stype := reflect.TypeOf(&ftree{})
 	itype := reflect.TypeOf((*FingerTree)(nil)).Elem()
 	TypeConformityTest(test, stype, itype)
 }
@@ -179,7 +179,7 @@ func TestFTreeTailr(test *testing.T) {
 }
 
 func TestFTreeHeadl(test *testing.T) {
-	v := ftree{Slice{1}, Slice{2}, empty{}}.Headl()
+	v := (&ftree{Slice{1}, Slice{2}, &empty{}}).Headl()
 	if v != 1 {
 		test.Error(fmt.Sprintf("ftree{1 2}.Headr() should be 1, got %v", v))
 	}
