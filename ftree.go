@@ -6,8 +6,8 @@ package fingerTree
 
 type ftree struct {
 	left  Slice
-	right Slice
 	child FingerTree
+	right Slice
 }
 
 func (t *ftree) Foldl(f FoldFunc, initial Any) Any {
@@ -36,8 +36,8 @@ func (t *ftree) Pushl(d Any) FingerTree {
 	if len(t.left) < 4 {
 		return &ftree{
 			append([]Any{d}, t.left...),
-			t.right,
 			t.child,
+			t.right,
 		}
 	}
 
@@ -54,8 +54,8 @@ func (t *ftree) Pushl(d Any) FingerTree {
 
 	return &ftree{
 		Slice{d, t.left[0]},
-		t.right,
 		child,
+		t.right,
 	}
 }
 
@@ -71,8 +71,8 @@ func (t *ftree) Pushr(d Any) FingerTree {
 	if len(t.right) < 4 {
 		return &ftree{
 			t.left,
-			append(t.right, d),
 			t.child,
+			append(t.right, d),
 		}
 	}
 
@@ -89,8 +89,8 @@ func (t *ftree) Pushr(d Any) FingerTree {
 
 	return &ftree{
 		t.left,
-		[]Any{t.right[3], d},
 		child,
+		[]Any{t.right[3], d},
 	}
 }
 
@@ -118,7 +118,7 @@ func (t *ftree) Headl() Any {
 
 func buildr(left Slice, m FingerTree, right Slice) FingerTree {
 	if len(right) > 0 {
-		return &ftree{left, right, m}
+		return &ftree{left, m, right}
 	}
 
 	if m.IsEmpty() {
@@ -127,14 +127,14 @@ func buildr(left Slice, m FingerTree, right Slice) FingerTree {
 
 	return &ftree{
 		left,
-		m.Headr().(node).ToSlice(),
 		m.Tailr(),
+		m.Headr().(node).ToSlice(),
 	}
 }
 
 func buildl(left Slice, m FingerTree, right Slice) FingerTree {
 	if len(left) > 0 {
-		return &ftree{left, right, m}
+		return &ftree{left, m, right}
 	}
 
 	if m.IsEmpty() {
@@ -143,8 +143,8 @@ func buildl(left Slice, m FingerTree, right Slice) FingerTree {
 
 	return &ftree{
 		m.Headl().(node).ToSlice(),
-		right,
 		m.Taill(),
+		right,
 	}
 }
 

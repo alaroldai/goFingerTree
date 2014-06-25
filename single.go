@@ -13,7 +13,11 @@ func (s *single) Foldr(f FoldFunc, initial Any) Any {
 }
 
 func (s *single) Pushl(d Any) FingerTree {
-	return &ftree{[]Any{d}, []Any{s.data}, &empty{}}
+	return &ftree{
+		[]Any{d},
+		&empty{},
+		[]Any{s.data},
+	}
 }
 
 func (s *single) Popl() (FingerTree, Any) {
@@ -25,7 +29,11 @@ func (s *single) Popr() (FingerTree, Any) {
 }
 
 func (s *single) Pushr(d Any) FingerTree {
-	return &ftree{[]Any{s.data}, []Any{d}, &empty{}}
+	return &ftree{
+		[]Any{s.data},
+		&empty{},
+		[]Any{d},
+	}
 }
 
 func (s *single) Iterl(f IterFunc) {

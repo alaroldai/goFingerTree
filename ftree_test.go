@@ -13,7 +13,7 @@ func TestFTreeImplementsFingerTree(test *testing.T) {
 }
 
 func TestFTreeFoldl(test *testing.T) {
-	var n FingerTree = &empty{}
+	var n FingerTree = makeEmpty()
 	for i := 0; i < 20; i++ {
 		n = n.Pushr(i)
 	}
@@ -29,7 +29,7 @@ func TestFTreeFoldl(test *testing.T) {
 }
 
 func TestFTreeFoldr(test *testing.T) {
-	var n FingerTree = &empty{}
+	var n FingerTree = makeEmpty()
 	for i := 0; i < 20; i++ {
 		n = n.Pushl(i)
 	}
@@ -57,7 +57,7 @@ func TestFTreePushl(test *testing.T) {
 }
 
 func TestFTreePopl(test *testing.T) {
-	var n FingerTree = &empty{}
+	var n FingerTree = makeEmpty()
 
 	for i := 0; i < 20; i++ {
 		n = n.Pushl(i)
@@ -83,7 +83,7 @@ func TestFTreePopl(test *testing.T) {
 }
 
 func TestFTreePopr(test *testing.T) {
-	var n FingerTree = &empty{}
+	var n FingerTree = makeEmpty()
 
 	for i := 0; i < 20; i++ {
 		n = n.Pushr(i)
@@ -123,7 +123,7 @@ func TestFTreePushr(test *testing.T) {
 }
 
 func TestFTreeIterl(test *testing.T) {
-	var n FingerTree = &empty{}
+	var n FingerTree = makeEmpty()
 	for i := 0; i < 10; i++ {
 		n = n.Pushl(i)
 	}
@@ -139,7 +139,7 @@ func TestFTreeIterl(test *testing.T) {
 }
 
 func TestFTreeIterr(test *testing.T) {
-	var n FingerTree = &empty{}
+	var n FingerTree = makeEmpty()
 	for i := 0; i < 10; i++ {
 		n = n.Pushl(i)
 	}
@@ -155,13 +155,13 @@ func TestFTreeIterr(test *testing.T) {
 }
 
 func TestFTreeHeadr(test *testing.T) {
-	v := (&empty{}).Pushr(1).Pushr(2)
+	v := (makeEmpty()).Pushr(1).Pushr(2)
 	r := v.Headr()
 	if r != 2 {
 		test.Error(fmt.Sprintf("ftree{1 2}.Headr() should be 2, got %v", r))
 	}
 
-	v = (&empty{}).Pushl(1).Pushl(2)
+	v = (makeEmpty()).Pushl(1).Pushl(2)
 	r = v.Headr()
 	if r != 1 {
 		test.Error(fmt.Sprintf("ftree{1 2}.Headr() should be 2, got %v", r))
@@ -179,7 +179,7 @@ func TestFTreeTailr(test *testing.T) {
 }
 
 func TestFTreeHeadl(test *testing.T) {
-	v := (&ftree{Slice{1}, Slice{2}, &empty{}}).Headl()
+	v := makeEmpty().Pushl(1).Pushr(2).Headl()
 	if v != 1 {
 		test.Error(fmt.Sprintf("ftree{1 2}.Headr() should be 1, got %v", v))
 	}
@@ -203,14 +203,14 @@ func TestFTreeIsEmpty(test *testing.T) {
 }
 
 func TestFTreeConcatl(test *testing.T) {
-	e := &empty{}
+	e := makeEmpty()
 	s := e.Pushl(1)
-	var t FingerTree = &empty{}
+	var t FingerTree = makeEmpty()
 	for i := 0; i < 25; i++ {
 		t = t.Pushl(i)
 	}
 
-	var o FingerTree = &empty{}
+	var o FingerTree = makeEmpty()
 	for i := 0; i < 5; i++ {
 		o = o.Pushl(i)
 	}
@@ -238,8 +238,8 @@ func TestFTreeConcatl(test *testing.T) {
 
 	testCombinations()
 
-	t = &empty{}
-	o = &empty{}
+	t = makeEmpty()
+	o = makeEmpty()
 	for i := 0; i < 5; i++ {
 		t = t.Pushl(i)
 	}
@@ -248,8 +248,8 @@ func TestFTreeConcatl(test *testing.T) {
 	}
 	testCombinations()
 
-	t = &empty{}
-	o = &empty{}
+	t = makeEmpty()
+	o = makeEmpty()
 	for i := 0; i < 25; i++ {
 		t = t.Pushl(i)
 	}
@@ -258,8 +258,8 @@ func TestFTreeConcatl(test *testing.T) {
 	}
 	testCombinations()
 
-	t = &empty{}
-	o = &empty{}
+	t = makeEmpty()
+	o = makeEmpty()
 	for i := 0; i < 105; i++ {
 		t = t.Pushl(i)
 	}
@@ -270,14 +270,14 @@ func TestFTreeConcatl(test *testing.T) {
 }
 
 func TestFTreeConcatr(test *testing.T) {
-	e := &empty{}
+	e := makeEmpty()
 	s := e.Pushr(1)
-	var t FingerTree = &empty{}
+	var t FingerTree = makeEmpty()
 	for i := 0; i < 25; i++ {
 		t = t.Pushr(i)
 	}
 
-	var o FingerTree = &empty{}
+	var o FingerTree = makeEmpty()
 	for i := 0; i < 5; i++ {
 		o = o.Pushr(i)
 	}
@@ -305,8 +305,8 @@ func TestFTreeConcatr(test *testing.T) {
 
 	testCombinations()
 
-	t = &empty{}
-	o = &empty{}
+	t = makeEmpty()
+	o = makeEmpty()
 	for i := 0; i < 5; i++ {
 		t = t.Pushr(i)
 	}
@@ -315,8 +315,8 @@ func TestFTreeConcatr(test *testing.T) {
 	}
 	testCombinations()
 
-	t = &empty{}
-	o = &empty{}
+	t = makeEmpty()
+	o = makeEmpty()
 	for i := 0; i < 25; i++ {
 		t = t.Pushr(i)
 	}
@@ -325,8 +325,8 @@ func TestFTreeConcatr(test *testing.T) {
 	}
 	testCombinations()
 
-	t = &empty{}
-	o = &empty{}
+	t = makeEmpty()
+	o = makeEmpty()
 	for i := 0; i < 105; i++ {
 		t = t.Pushr(i)
 	}

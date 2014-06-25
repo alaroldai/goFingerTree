@@ -2,6 +2,10 @@ package fingerTree
 
 type empty struct{}
 
+func makeEmpty() *empty {
+	return &empty{}
+}
+
 func (e *empty) Foldl(f FoldFunc, initial Any) Any {
 	return initial
 }
@@ -15,11 +19,11 @@ func (e *empty) Pushl(d Any) FingerTree {
 }
 
 func (e *empty) Popl() (FingerTree, Any) {
-	return &empty{}, nil
+	return makeEmpty(), nil
 }
 
 func (e *empty) Popr() (FingerTree, Any) {
-	return &empty{}, nil
+	return makeEmpty(), nil
 }
 
 func (e *empty) Pushr(d Any) FingerTree {

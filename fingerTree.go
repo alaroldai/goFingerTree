@@ -117,5 +117,9 @@ func glue(l FingerTree, c Slice, r FingerTree) FingerTree {
 
 	ns := nodes(append(append(lt.right, c...), rt.left...))
 	nc := glue(lt.child, ns, rt.child)
-	return &ftree{lt.left, rt.right, nc}
+	return &ftree{
+		lt.left,
+		nc,
+		rt.right,
+	}
 }
