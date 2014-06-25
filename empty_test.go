@@ -7,13 +7,13 @@ import (
 )
 
 func TestEmptyImplementsFingerTree(test *testing.T) {
-	stype := reflect.TypeOf(&empty{})
+	stype := reflect.TypeOf(makeEmpty())
 	itype := reflect.TypeOf((*FingerTree)(nil)).Elem()
 	TypeConformityTest(test, stype, itype)
 }
 
 func TestEmptyFoldl(test *testing.T) {
-	n := &empty{}
+	n := makeEmpty()
 	add := func(a Any, b Any) Any {
 		return append(a.(Slice), b)
 	}
@@ -24,7 +24,7 @@ func TestEmptyFoldl(test *testing.T) {
 }
 
 func TestEmptyFoldr(test *testing.T) {
-	n := &empty{}
+	n := makeEmpty()
 	add := func(a Any, b Any) Any {
 		return append(a.(Slice), b)
 	}
@@ -35,7 +35,7 @@ func TestEmptyFoldr(test *testing.T) {
 }
 
 func TestEmptyIterr(test *testing.T) {
-	n := &empty{}
+	n := makeEmpty()
 	sum := 0
 	add := func(b Any) {
 		sum += b.(int)
@@ -47,7 +47,7 @@ func TestEmptyIterr(test *testing.T) {
 }
 
 func TestEmptyIterl(test *testing.T) {
-	n := &empty{}
+	n := makeEmpty()
 	sum := 0
 	add := func(b Any) {
 		sum += b.(int)
@@ -59,14 +59,14 @@ func TestEmptyIterl(test *testing.T) {
 }
 
 func TestEmptyPushl(test *testing.T) {
-	v := (&empty{}).Pushl(1)
+	v := (makeEmpty()).Pushl(1)
 	if cmpslices(ToSlice(v), []Any{1}) == false {
 		test.Error(fmt.Sprintf("Expected empty{}.Pushl(1) to result in single{1}, got %v", ToSlice(v)))
 	}
 }
 
 func TestEmptyPopl(test *testing.T) {
-	n := &empty{}
+	n := makeEmpty()
 	r, e := n.Popl()
 
 	_, isEmpty := r.(*empty)
@@ -79,7 +79,7 @@ func TestEmptyPopl(test *testing.T) {
 }
 
 func TestEmptyPopr(test *testing.T) {
-	n := &empty{}
+	n := makeEmpty()
 	r, e := n.Popr()
 
 	_, isEmpty := r.(*empty)
@@ -92,53 +92,53 @@ func TestEmptyPopr(test *testing.T) {
 }
 
 func TestEmptyPushr(test *testing.T) {
-	v := (&empty{}).Pushr(1)
+	v := (makeEmpty()).Pushr(1)
 	if cmpslices(ToSlice(v), []Any{1}) == false {
 		test.Error(fmt.Sprintf("Expected empty{}.Pushr(1) to result in single{1}, got %v", ToSlice(v)))
 	}
 }
 
 func TestEmptyHeadr(test *testing.T) {
-	v := (&empty{}).Headr()
+	v := (makeEmpty()).Headr()
 	if v != nil {
 		test.Error(fmt.Sprintf("empty{}.Headl() should be nil, got %v", v))
 	}
 }
 
 func TestEmptyTailr(test *testing.T) {
-	v := (&empty{}).Tailr()
+	v := (makeEmpty()).Tailr()
 	if v != nil {
 		test.Error(fmt.Sprintf("empty{}.Tailr() should be nil, got %v", v))
 	}
 }
 
 func TestEmptyHeadl(test *testing.T) {
-	v := (&empty{}).Headl()
+	v := (makeEmpty()).Headl()
 	if v != nil {
 		test.Error(fmt.Sprintf("empty{}.Headl() should be nil, got %v", v))
 	}
 }
 
 func TestEmptyTaill(test *testing.T) {
-	v := (&empty{}).Taill()
+	v := (makeEmpty()).Taill()
 	if v != nil {
 		test.Error(fmt.Sprintf("empty{}.Tailr() should be nil, got %v", v))
 	}
 }
 
 func TestEmptyIsEmpty(test *testing.T) {
-	v := &empty{}
+	v := makeEmpty()
 	if !v.IsEmpty() {
-		test.Error("Expected &empty{}.IsEmpty() to be true")
+		test.Error("Expected makeEmpty().IsEmpty() to be true")
 	}
 }
 
 func TestEmptyConcatl(test *testing.T) {
-	e := &empty{}
+	e := makeEmpty()
 	s := e.Pushl(1)
 	t := s.Pushl(2)
 
-	o := &empty{}
+	o := makeEmpty()
 
 	if !cmpslices(ToSlice(t), ToSlice(e.Concatl(t))) {
 		test.Error(fmt.Sprintf("Expected e.Concatl to return %v, got %v", ToSlice(t), ToSlice(e.Concatl(t))))
@@ -154,7 +154,7 @@ func TestEmptyConcatl(test *testing.T) {
 }
 
 func TestEmptyConcatr(test *testing.T) {
-	e := &empty{}
+	e := makeEmpty()
 	s := e.Pushl(1)
 	t := s.Pushl(2)
 

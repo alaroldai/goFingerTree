@@ -15,7 +15,7 @@ func (e *empty) Foldr(f FoldFunc, initial Any) Any {
 }
 
 func (e *empty) Pushl(d Any) FingerTree {
-	return &single{d}
+	return makeSingle(d)
 }
 
 func (e *empty) Popl() (FingerTree, Any) {
@@ -27,7 +27,7 @@ func (e *empty) Popr() (FingerTree, Any) {
 }
 
 func (e *empty) Pushr(d Any) FingerTree {
-	return &single{d}
+	return makeSingle(d)
 }
 
 func (e *empty) Iterl(f IterFunc) {

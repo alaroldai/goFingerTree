@@ -10,6 +10,14 @@ type ftree struct {
 	right Slice
 }
 
+func makeFTree(left Slice, child FingerTree, right Slice) *ftree {
+	return &ftree{
+		left,
+		child,
+		right,
+	}
+}
+
 func (t *ftree) Foldl(f FoldFunc, initial Any) Any {
 	lift := func(init Any, data Any) Any {
 		n := data.(node)
@@ -34,29 +42,27 @@ func (t *ftree) Foldr(f FoldFunc, initial Any) Any {
 
 func (t *ftree) Pushl(d Any) FingerTree {
 	if len(t.left) < 4 {
-		return &ftree{
+		return makeFTree(
 			append([]Any{d}, t.left...),
 			t.child,
 			t.right,
-		}
+		)
 	}
 
 	var child FingerTree
-	pushdown := &node3{
-		[3]Any{
+	pushdown := makeNode3(
 			t.left[1],
 			t.left[2],
 			t.left[3],
-		},
-	}
+	)
 
 	child = t.child.Pushl(pushdown)
 
-	return &ftree{
+	return makeFTree(
 		Slice{d, t.left[0]},
 		child,
 		t.right,
-	}
+	)
 }
 
 func (t *ftree) Popl() (FingerTree, Any) {
@@ -69,29 +75,27 @@ func (t *ftree) Popr() (FingerTree, Any) {
 
 func (t *ftree) Pushr(d Any) FingerTree {
 	if len(t.right) < 4 {
-		return &ftree{
+		return makeFTree(
 			t.left,
 			t.child,
 			append(t.right, d),
-		}
+		)
 	}
 
 	var child FingerTree
-	pushdown := &node3{
-		[3]Any{
+	pushdown := makeNode3(
 			t.right[0],
 			t.right[1],
 			t.right[2],
-		},
-	}
+	)
 
 	child = t.child.Pushr(pushdown)
 
-	return &ftree{
+	return makeFTree(
 		t.left,
 		child,
 		[]Any{t.right[3], d},
-	}
+	)
 }
 
 func (t *ftree) Iterl(f IterFunc) {
@@ -118,34 +122,42 @@ func (t *ftree) Headl() Any {
 
 func buildr(left Slice, m FingerTree, right Slice) FingerTree {
 	if len(right) > 0 {
-		return &ftree{left, m, right}
+		return makeFTree(
+			left,
+			m,
+			right,
+		)
 	}
 
 	if m.IsEmpty() {
 		return ToFingerTree(left)
 	}
 
-	return &ftree{
+	return makeFTree(
 		left,
 		m.Tailr(),
 		m.Headr().(node).ToSlice(),
-	}
+	)
 }
 
 func buildl(left Slice, m FingerTree, right Slice) FingerTree {
 	if len(left) > 0 {
-		return &ftree{left, m, right}
+		return makeFTree(
+			left,
+			m,
+			right,
+		)
 	}
 
 	if m.IsEmpty() {
 		return ToFingerTree(right)
 	}
 
-	return &ftree{
+	return makeFTree(
 		m.Headl().(node).ToSlice(),
 		m.Taill(),
 		right,
-	}
+	)
 }
 
 func (t *ftree) Tailr() FingerTree {

@@ -45,7 +45,7 @@ func TestFTreeFoldr(test *testing.T) {
 }
 
 func TestFTreePushl(test *testing.T) {
-	var n FingerTree = &single{0}
+	var n FingerTree = makeSingle(0)
 
 	for i := 1; i < 20; i++ {
 		n = n.Pushl(i)
@@ -109,7 +109,7 @@ func TestFTreePopr(test *testing.T) {
 }
 
 func TestFTreePushr(test *testing.T) {
-	var n FingerTree = &single{0}
+	var n FingerTree = makeSingle(0)
 
 	for i := 1; i < 20; i++ {
 		n = n.Pushr(i)

@@ -4,6 +4,10 @@ type single struct {
 	data Any
 }
 
+func makeSingle(d Any) *single {
+	return &single{d}
+}
+
 func (s *single) Foldl(f FoldFunc, initial Any) Any {
 	return f(initial, s.data)
 }
@@ -13,27 +17,27 @@ func (s *single) Foldr(f FoldFunc, initial Any) Any {
 }
 
 func (s *single) Pushl(d Any) FingerTree {
-	return &ftree{
+	return makeFTree(
 		[]Any{d},
-		&empty{},
+		makeEmpty(),
 		[]Any{s.data},
-	}
+	)
 }
 
 func (s *single) Popl() (FingerTree, Any) {
-	return &empty{}, s.data
+	return makeEmpty(), s.data
 }
 
 func (s *single) Popr() (FingerTree, Any) {
-	return &empty{}, s.data
+	return makeEmpty(), s.data
 }
 
 func (s *single) Pushr(d Any) FingerTree {
-	return &ftree{
+	return makeFTree(
 		[]Any{s.data},
-		&empty{},
+		makeEmpty(),
 		[]Any{d},
-	}
+	)
 }
 
 func (s *single) Iterl(f IterFunc) {
@@ -53,11 +57,11 @@ func (s *single) Headl() Any {
 }
 
 func (s *single) Tailr() FingerTree {
-	return &empty{}
+	return makeEmpty()
 }
 
 func (s *single) Taill() FingerTree {
-	return &empty{}
+	return makeEmpty()
 }
 
 func (s *single) IsEmpty() bool {

@@ -9,6 +9,10 @@ type node2 struct {
 	data [2]Any
 }
 
+func makeNode2(a, b Any) *node2 {
+	return &node2{[2]Any{a, b}}
+}
+
 func (n node2) ToSlice() Slice {
 	return n.data[:]
 }
@@ -31,6 +35,10 @@ func (n node2) Iterr(f IterFunc) {
 
 type node3 struct {
 	data [3]Any
+}
+
+func makeNode3(a, b, c Any) *node3 {
+	return &node3{[3]Any{a, b, c}}
 }
 
 func (n node3) ToSlice() Slice {
