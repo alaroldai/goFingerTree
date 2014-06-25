@@ -1,11 +1,21 @@
 package fingerTree
 
 type single struct {
+	size int
 	data Any
 }
 
 func makeSingle(d Any) *single {
-	return &single{d}
+	sz := 1
+	dn, succ := d.(mdata)
+	if succ {
+		sz = dn.ft_size()
+	}
+	return &single{sz, d}
+}
+
+func (s *single) ft_size() int {
+	return s.size
 }
 
 func (s *single) Foldl(f FoldFunc, initial Any) Any {

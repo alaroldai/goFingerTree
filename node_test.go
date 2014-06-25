@@ -3,6 +3,7 @@ package fingerTree
 import (
 	"reflect"
 	"testing"
+	"fmt"
 )
 
 func TestNode2ImplementsNode(test *testing.T) {
@@ -18,7 +19,7 @@ func TestNode3ImplementsNode(test *testing.T) {
 }
 
 func TestNode2Foldl(test *testing.T) {
-	n := node2{[2]Any{1, 2}}
+	n := makeNode2(1, 2)
 	add := func(a Any, b Any) Any {
 		return Any(a.(int) + b.(int))
 	}
@@ -29,7 +30,7 @@ func TestNode2Foldl(test *testing.T) {
 }
 
 func TestNode3Foldl(test *testing.T) {
-	n := node3{[3]Any{1, 2, 3}}
+	n := makeNode3(1, 2, 3)
 	add := func(a Any, b Any) Any {
 		return Any(a.(int) + b.(int))
 	}
@@ -40,7 +41,7 @@ func TestNode3Foldl(test *testing.T) {
 }
 
 func TestNode2Foldr(test *testing.T) {
-	n := node2{[2]Any{1, 2}}
+	n := makeNode2(1, 2)
 	add := func(a Any, b Any) Any {
 		return Any(a.(int) + b.(int))
 	}
@@ -51,7 +52,7 @@ func TestNode2Foldr(test *testing.T) {
 }
 
 func TestNode3Foldr(test *testing.T) {
-	n := node3{[3]Any{1, 2, 3}}
+	n := makeNode3(1, 2, 3)
 	add := func(a Any, b Any) Any {
 		return Any(a.(int) + b.(int))
 	}
@@ -62,7 +63,7 @@ func TestNode3Foldr(test *testing.T) {
 }
 
 func TestNode2Iterr(test *testing.T) {
-	n := node2{[2]Any{1, 2}}
+	n := makeNode2(1, 2)
 	sum := 0
 	add := func(b Any) {
 		sum += b.(int)
@@ -74,7 +75,7 @@ func TestNode2Iterr(test *testing.T) {
 }
 
 func TestNode3Iterr(test *testing.T) {
-	n := node3{[3]Any{1, 2, 3}}
+	n := makeNode3(1, 2, 3)
 	sum := 0
 	add := func(b Any) {
 		sum += b.(int)
@@ -86,7 +87,7 @@ func TestNode3Iterr(test *testing.T) {
 }
 
 func TestNode2Iterl(test *testing.T) {
-	n := node2{[2]Any{1, 2}}
+	n := makeNode2(1, 2)
 	sum := 0
 	add := func(b Any) {
 		sum += b.(int)
@@ -98,7 +99,7 @@ func TestNode2Iterl(test *testing.T) {
 }
 
 func TestNode3Iterl(test *testing.T) {
-	n := node3{[3]Any{1, 2, 3}}
+	n := makeNode3(1, 2, 3)
 	sum := 0
 	add := func(b Any) {
 		sum += b.(int)
@@ -106,5 +107,19 @@ func TestNode3Iterl(test *testing.T) {
 	n.Iterl(add)
 	if sum != 6 {
 		test.Error("Expected n.Iterl(func (a, b uint) { return a + b }, 0) to return 3, got " + string(sum))
+	}
+}
+
+func TestNode2FTSize(test *testing.T) {
+	n := makeNode2(1, 2)
+	if n.ft_size() != 2 {
+		test.Error(fmt.Sprintf("Expected n.ft_size() to equal 2, got %v", n.ft_size()))
+	}
+}
+
+func TestNode3FTSize(test *testing.T) {
+	n := makeNode3(1, 2, 3)
+	if n.ft_size() != 3 {
+		test.Error(fmt.Sprintf("Expected n.ft_size() to equal 3, got %v", n.ft_size()))
 	}
 }

@@ -170,3 +170,10 @@ func TestSingleConcatr(test *testing.T) {
 		test.Error(fmt.Sprintf("Expected s.Concatr to return %v, got %v", expected, ToSlice(s.Concatr(e))))
 	}
 }
+
+func TestSingleFTSize(test *testing.T) {
+	e := makeSingle(2)
+	if e.ft_size() != 1 {
+		test.Error(fmt.Sprintf("Expected e.ft_size to equal 1, got %v", e.ft_size()))
+	}
+}

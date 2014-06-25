@@ -335,3 +335,14 @@ func TestFTreeConcatr(test *testing.T) {
 	}
 	testCombinations()
 }
+
+func TestFTreeFTSize(test *testing.T) {
+	var t FingerTree = makeEmpty()
+	exp := 105
+	for i := 0; i < exp; i++ {
+		t = t.Pushr(i)
+	}
+	if t.ft_size() != exp {
+		test.Error(fmt.Sprintf("Expected t.ft_size() to equal %v, got %v", exp, t.ft_size()))
+	}
+}

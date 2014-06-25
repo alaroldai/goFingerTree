@@ -6,6 +6,10 @@ func makeEmpty() *empty {
 	return &empty{}
 }
 
+func (e *empty) ft_size() int {
+	return 0
+}
+
 func (e *empty) Foldl(f FoldFunc, initial Any) Any {
 	return initial
 }
