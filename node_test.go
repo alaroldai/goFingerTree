@@ -1,9 +1,9 @@
 package fingerTree
 
 import (
+	"fmt"
 	"reflect"
 	"testing"
-	"fmt"
 )
 
 func TestNode2ImplementsNode(test *testing.T) {
@@ -112,14 +112,14 @@ func TestNode3Iterl(test *testing.T) {
 
 func TestNode2FTSize(test *testing.T) {
 	n := makeNode2(1, 2)
-	if n.ft_size() != 2 {
-		test.Error(fmt.Sprintf("Expected n.ft_size() to equal 2, got %v", n.ft_size()))
+	if n.mdataForKey(ft_size_key).(int) != 2 {
+		test.Error(fmt.Sprintf("Expected n.mdataForKey(ft_size_key).(int) to equal 2, got %v", n.mdataForKey(ft_size_key).(int)))
 	}
 }
 
 func TestNode3FTSize(test *testing.T) {
 	n := makeNode3(1, 2, 3)
-	if n.ft_size() != 3 {
-		test.Error(fmt.Sprintf("Expected n.ft_size() to equal 3, got %v", n.ft_size()))
+	if n.mdataForKey(ft_size_key).(int) != 3 {
+		test.Error(fmt.Sprintf("Expected n.mdataForKey(ft_size_key).(int) to equal 3, got %v", n.mdataForKey(ft_size_key).(int)))
 	}
 }

@@ -175,7 +175,7 @@ func TestEmptyConcatr(test *testing.T) {
 
 func TestEmptyFTSize(test *testing.T) {
 	e := makeEmpty()
-	if e.ft_size() != 0 {
-		test.Error(fmt.Sprintf("Expected e.ft_size to equal 0, got %v", e.ft_size()))
+	if e.mdataForKey(ft_size_key).(int) != 0 {
+		test.Error(fmt.Sprintf("Expected e.ft_size to equal 0, got %v", e.mdataForKey(ft_size_key).(int)))
 	}
 }

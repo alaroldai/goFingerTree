@@ -5,32 +5,31 @@ package fingerTree
  */
 
 type ftree struct {
-	size int
-	left  Slice
-	child FingerTree
-	right Slice
+	metadata map[string]Any
+	left     Slice
+	child    FingerTree
+	right    Slice
 }
 
 func makeFTree(left Slice, child FingerTree, right Slice) *ftree {
-	sz := (Slice{left, right}).Foldl(func (init Any, curr Any) Any {
-		return curr.(Slice).Foldl(func (i Any, a Any) Any {
-			an, succ := a.(mdata)
-			if succ {
-				return i.(int) + an.ft_size()
-			}
-			return i.(int) + 1
-		}, init)
-	}, 0).(int) + child.ft_size()
+	meta := make(map[string]Any)
+	for k, v := range mdataTypes {
+		lz := mdataComposeFromSliceWithKey(left, k)
+		rz := mdataComposeFromSliceWithKey(right, k)
+		cz := child.mdataForKey(k)
+		sz := Slice{lz, rz, cz}.Foldl(func(a, b Any) Any { return v.compose(a, b) }, v.identity)
+		meta[k] = sz
+	}
 	return &ftree{
-		sz,
+		meta,
 		left,
 		child,
 		right,
 	}
 }
 
-func (t *ftree) ft_size() int {
-	return t.size
+func (t *ftree) mdataForKey(key string) Any {
+	return t.metadata[key]
 }
 
 func (t *ftree) Foldl(f FoldFunc, initial Any) Any {
@@ -66,9 +65,9 @@ func (t *ftree) Pushl(d Any) FingerTree {
 
 	var child FingerTree
 	pushdown := makeNode3(
-			t.left[1],
-			t.left[2],
-			t.left[3],
+		t.left[1],
+		t.left[2],
+		t.left[3],
 	)
 
 	child = t.child.Pushl(pushdown)
@@ -99,9 +98,9 @@ func (t *ftree) Pushr(d Any) FingerTree {
 
 	var child FingerTree
 	pushdown := makeNode3(
-			t.right[0],
-			t.right[1],
-			t.right[2],
+		t.right[0],
+		t.right[1],
+		t.right[2],
 	)
 
 	child = t.child.Pushr(pushdown)
