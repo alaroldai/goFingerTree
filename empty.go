@@ -6,7 +6,7 @@ func makeEmpty() *empty {
 	return &empty{}
 }
 
-func (e *empty) mdataForKey(key string) Any {
+func (e *empty) mdataForKey(key string, mdataTypes mdataTypeMap) Any {
 	return mdataTypes[key].identity
 }
 
@@ -18,20 +18,20 @@ func (e *empty) Foldr(f FoldFunc, initial Any) Any {
 	return initial
 }
 
-func (e *empty) Pushl(d Any) FingerTree {
-	return makeSingle(d)
+func (e *empty) Pushl(d Any, mdataTypes mdataTypeMap) FingerTreeComponent {
+	return makeSingle(d, mdataTypes)
 }
 
-func (e *empty) Popl() (FingerTree, Any) {
+func (e *empty) Popl(mdataTypes mdataTypeMap) (FingerTreeComponent, Any) {
 	return makeEmpty(), nil
 }
 
-func (e *empty) Popr() (FingerTree, Any) {
+func (e *empty) Popr(mdataTypes mdataTypeMap) (FingerTreeComponent, Any) {
 	return makeEmpty(), nil
 }
 
-func (e *empty) Pushr(d Any) FingerTree {
-	return makeSingle(d)
+func (e *empty) Pushr(d Any, mdataTypes mdataTypeMap) FingerTreeComponent {
+	return makeSingle(d, mdataTypes)
 }
 
 func (e *empty) Iterl(f IterFunc) {
@@ -50,12 +50,12 @@ func (e *empty) Headl() Any {
 	return nil
 }
 
-func (e *empty) Tailr() FingerTree {
+func (e *empty) Tailr(mdataTypes mdataTypeMap) FingerTreeComponent {
 	// Not sure if this makes sense
 	return nil
 }
 
-func (e *empty) Taill() FingerTree {
+func (e *empty) Taill(mdataTypes mdataTypeMap) FingerTreeComponent {
 	return nil
 }
 
@@ -63,10 +63,14 @@ func (e *empty) IsEmpty() bool {
 	return true
 }
 
-func (e *empty) Concatr(t FingerTree) FingerTree {
+func (e *empty) Concatr(t FingerTreeComponent, mdataTypes mdataTypeMap) FingerTreeComponent {
 	return t
 }
 
-func (e *empty) Concatl(t FingerTree) FingerTree {
+func (e *empty) Concatl(t FingerTreeComponent, mdataTypes mdataTypeMap) FingerTreeComponent {
 	return t
+}
+
+func (e *empty) ToSlice() Slice {
+	return ToSlice(e)
 }

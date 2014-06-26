@@ -1,26 +1,26 @@
 package fingerTree
 
 /**
- *	ftree structure
+ *	ftreeTriple structure
  */
 
-type ftree struct {
+type ftreeTriple struct {
 	metadata map[string]Any
 	left     Slice
-	child    FingerTree
+	child    FingerTreeComponent
 	right    Slice
 }
 
-func makeFTree(left Slice, child FingerTree, right Slice) *ftree {
+func makeFTreeTriple(left Slice, child FingerTreeComponent, right Slice, mdataTypes mdataTypeMap) *ftreeTriple {
 	meta := make(map[string]Any)
 	for k, v := range mdataTypes {
-		lz := mdataComposeFromSliceWithKey(left, k)
-		rz := mdataComposeFromSliceWithKey(right, k)
-		cz := child.mdataForKey(k)
+		lz := mdataComposeFromSliceWithKey(left, k, mdataTypes)
+		rz := mdataComposeFromSliceWithKey(right, k, mdataTypes)
+		cz := child.mdataForKey(k, mdataTypes)
 		sz := Slice{lz, rz, cz}.Foldl(func(a, b Any) Any { return v.compose(a, b) }, v.identity)
 		meta[k] = sz
 	}
-	return &ftree{
+	return &ftreeTriple{
 		meta,
 		left,
 		child,
@@ -28,11 +28,11 @@ func makeFTree(left Slice, child FingerTree, right Slice) *ftree {
 	}
 }
 
-func (t *ftree) mdataForKey(key string) Any {
+func (t *ftreeTriple) mdataForKey(key string, mdataTypes mdataTypeMap) Any {
 	return t.metadata[key]
 }
 
-func (t *ftree) Foldl(f FoldFunc, initial Any) Any {
+func (t *ftreeTriple) Foldl(f FoldFunc, initial Any) Any {
 	lift := func(init Any, data Any) Any {
 		n := data.(node)
 		return n.Foldl(f, init)
@@ -43,7 +43,7 @@ func (t *ftree) Foldl(f FoldFunc, initial Any) Any {
 	return t.right.Foldl(f, b)
 }
 
-func (t *ftree) Foldr(f FoldFunc, initial Any) Any {
+func (t *ftreeTriple) Foldr(f FoldFunc, initial Any) Any {
 	lift := func(init Any, data Any) Any {
 		n := data.(node)
 		return n.Foldr(f, init)
@@ -54,147 +54,161 @@ func (t *ftree) Foldr(f FoldFunc, initial Any) Any {
 	return t.left.Foldr(f, b)
 }
 
-func (t *ftree) Pushl(d Any) FingerTree {
+func (t *ftreeTriple) Pushl(d Any, mdataTypes mdataTypeMap) FingerTreeComponent {
 	if len(t.left) < 4 {
-		return makeFTree(
+		return makeFTreeTriple(
 			append([]Any{d}, t.left...),
 			t.child,
 			t.right,
+			mdataTypes,
 		)
 	}
 
-	var child FingerTree
+	var child FingerTreeComponent
 	pushdown := makeNode3(
 		t.left[1],
 		t.left[2],
 		t.left[3],
+		mdataTypes,
 	)
 
-	child = t.child.Pushl(pushdown)
+	child = t.child.Pushl(pushdown, mdataTypes)
 
-	return makeFTree(
+	return makeFTreeTriple(
 		Slice{d, t.left[0]},
 		child,
 		t.right,
+		mdataTypes,
 	)
 }
 
-func (t *ftree) Popl() (FingerTree, Any) {
-	return t.Taill(), t.Headl()
+func (t *ftreeTriple) Popl(mdataTypes mdataTypeMap) (FingerTreeComponent, Any) {
+	return t.Taill(mdataTypes), t.Headl()
 }
 
-func (t *ftree) Popr() (FingerTree, Any) {
-	return t.Tailr(), t.Headr()
+func (t *ftreeTriple) Popr(mdataTypes mdataTypeMap) (FingerTreeComponent, Any) {
+	return t.Tailr(mdataTypes), t.Headr()
 }
 
-func (t *ftree) Pushr(d Any) FingerTree {
+func (t *ftreeTriple) Pushr(d Any, mdataTypes mdataTypeMap) FingerTreeComponent {
 	if len(t.right) < 4 {
-		return makeFTree(
+		return makeFTreeTriple(
 			t.left,
 			t.child,
 			append(t.right, d),
+			mdataTypes,
 		)
 	}
 
-	var child FingerTree
+	var child FingerTreeComponent
 	pushdown := makeNode3(
 		t.right[0],
 		t.right[1],
 		t.right[2],
+		mdataTypes,
 	)
 
-	child = t.child.Pushr(pushdown)
+	child = t.child.Pushr(pushdown, mdataTypes)
 
-	return makeFTree(
+	return makeFTreeTriple(
 		t.left,
 		child,
 		[]Any{t.right[3], d},
+		mdataTypes,
 	)
 }
 
-func (t *ftree) Iterl(f IterFunc) {
+func (t *ftreeTriple) Iterl(f IterFunc) {
 	t.Foldl(func(_ Any, b Any) Any {
 		f(b)
 		return nil
 	}, nil)
 }
 
-func (t *ftree) Iterr(f IterFunc) {
+func (t *ftreeTriple) Iterr(f IterFunc) {
 	t.Foldr(func(_ Any, b Any) Any {
 		f(b)
 		return nil
 	}, nil)
 }
 
-func (t *ftree) Headr() Any {
+func (t *ftreeTriple) Headr() Any {
 	return t.right[len(t.right)-1]
 }
 
-func (t *ftree) Headl() Any {
+func (t *ftreeTriple) Headl() Any {
 	return t.left[0]
 }
 
-func buildr(left Slice, m FingerTree, right Slice) FingerTree {
+func buildr(left Slice, m FingerTreeComponent, right Slice, mdataTypes mdataTypeMap) FingerTreeComponent {
 	if len(right) > 0 {
-		return makeFTree(
+		return makeFTreeTriple(
 			left,
 			m,
 			right,
+			mdataTypes,
 		)
 	}
 
 	if m.IsEmpty() {
-		return ToFingerTree(left)
+		return ToFingerTreeComponent(left, mdataTypes)
 	}
 
-	return makeFTree(
+	return makeFTreeTriple(
 		left,
-		m.Tailr(),
+		m.Tailr(mdataTypes),
 		m.Headr().(node).ToSlice(),
+		mdataTypes,
 	)
 }
 
-func buildl(left Slice, m FingerTree, right Slice) FingerTree {
+func buildl(left Slice, m FingerTreeComponent, right Slice, mdataTypes mdataTypeMap) FingerTreeComponent {
 	if len(left) > 0 {
-		return makeFTree(
+		return makeFTreeTriple(
 			left,
 			m,
 			right,
+			mdataTypes,
 		)
 	}
 
 	if m.IsEmpty() {
-		return ToFingerTree(right)
+		return ToFingerTreeComponent(right, mdataTypes)
 	}
 
-	return makeFTree(
+	return makeFTreeTriple(
 		m.Headl().(node).ToSlice(),
-		m.Taill(),
+		m.Taill(mdataTypes),
 		right,
+		mdataTypes,
 	)
 }
 
-func (t *ftree) Tailr() FingerTree {
-	return buildr(t.left, t.child, t.right[:len(t.right)-1])
+func (t *ftreeTriple) Tailr(mdataTypes mdataTypeMap) FingerTreeComponent {
+	return buildr(t.left, t.child, t.right[:len(t.right)-1], mdataTypes)
 }
 
-func (t *ftree) Taill() FingerTree {
-	return buildl(t.left[1:], t.child, t.right)
+func (t *ftreeTriple) Taill(mdataTypes mdataTypeMap) FingerTreeComponent {
+	return buildl(t.left[1:], t.child, t.right, mdataTypes)
 }
 
-func (t *ftree) IsEmpty() bool {
+func (t *ftreeTriple) IsEmpty() bool {
 	return false
 }
 
-func (t *ftree) Concatr(other FingerTree) FingerTree {
-	otherAsFtree, isFTree := other.(*ftree)
+func (t *ftreeTriple) Concatr(other FingerTreeComponent, mdataTypes mdataTypeMap) FingerTreeComponent {
+	otherAsFtree, isFTree := other.(*ftreeTriple)
 	if !isFTree {
-		return other.Concatl(t)
+		return other.Concatl(t, mdataTypes)
 	}
 
-	return glue(t, Slice{}, otherAsFtree)
+	return glue(t, Slice{}, otherAsFtree, mdataTypes)
 }
 
-func (t *ftree) Concatl(other FingerTree) FingerTree {
-	return other.Concatr(t)
+func (t *ftreeTriple) Concatl(other FingerTreeComponent, mdataTypes mdataTypeMap) FingerTreeComponent {
+	return other.Concatr(t, mdataTypes)
+}
+
+func (t *ftreeTriple) ToSlice() Slice {
+	return ToSlice(t)
 }

@@ -4,7 +4,6 @@ type Slice []Any
 
 type FoldFunc func(Any, Any) Any
 type Foldable interface {
-	Iterable
 	Foldl(f FoldFunc, initial Any) Any
 	Foldr(f FoldFunc, initial Any) Any
 }
@@ -16,6 +15,8 @@ type Iterable interface {
 }
 
 type Sliceable interface {
+	Foldable
+	Iterable
 	ToSlice() Slice
 }
 

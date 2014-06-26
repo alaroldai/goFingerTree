@@ -7,6 +7,16 @@ import (
 	"testing"
 )
 
+var mdataStandardTypes mdataTypeMap = mdataTypeMap{
+	ft_size_key: mdataField{
+		0,
+		1,
+		func(a, b Any) Any {
+			return a.(int) + b.(int)
+		},
+	},
+}
+
 func MethodsMissingFromType(inter, typ reflect.Type) []string {
 	missingMethods := make([]string, 0)
 	for n := 0; n < inter.NumMethod(); n++ {

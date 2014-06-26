@@ -5,20 +5,20 @@ type single struct {
 	data     Any
 }
 
-func makeSingle(d Any) *single {
+func makeSingle(d Any, mdataTypes mdataTypeMap) *single {
 	meta := make(map[string]Any)
 	for k, v := range mdataTypes {
 		sz := v.unit
-		dn, succ := d.(mdata)
+		dn, succ := d.(mdataContainer)
 		if succ {
-			sz = dn.mdataForKey(k)
+			sz = dn.mdataForKey(k, mdataTypes)
 		}
 		meta[k] = sz
 	}
 	return &single{meta, d}
 }
 
-func (s *single) mdataForKey(key string) Any {
+func (s *single) mdataForKey(key string, mdataTypes mdataTypeMap) Any {
 	return s.metadata[key]
 }
 
@@ -30,27 +30,29 @@ func (s *single) Foldr(f FoldFunc, initial Any) Any {
 	return f(initial, s.data)
 }
 
-func (s *single) Pushl(d Any) FingerTree {
-	return makeFTree(
+func (s *single) Pushl(d Any, mdataTypes mdataTypeMap) FingerTreeComponent {
+	return makeFTreeTriple(
 		[]Any{d},
 		makeEmpty(),
 		[]Any{s.data},
+		mdataTypes,
 	)
 }
 
-func (s *single) Popl() (FingerTree, Any) {
+func (s *single) Popl(mdTypes mdataTypeMap) (FingerTreeComponent, Any) {
 	return makeEmpty(), s.data
 }
 
-func (s *single) Popr() (FingerTree, Any) {
+func (s *single) Popr(mdTypes mdataTypeMap) (FingerTreeComponent, Any) {
 	return makeEmpty(), s.data
 }
 
-func (s *single) Pushr(d Any) FingerTree {
-	return makeFTree(
+func (s *single) Pushr(d Any, mdataTypes mdataTypeMap) FingerTreeComponent {
+	return makeFTreeTriple(
 		[]Any{s.data},
 		makeEmpty(),
 		[]Any{d},
+		mdataTypes,
 	)
 }
 
@@ -70,11 +72,11 @@ func (s *single) Headl() Any {
 	return s.data
 }
 
-func (s *single) Tailr() FingerTree {
+func (s *single) Tailr(mdTypes mdataTypeMap) FingerTreeComponent {
 	return makeEmpty()
 }
 
-func (s *single) Taill() FingerTree {
+func (s *single) Taill(mdTypes mdataTypeMap) FingerTreeComponent {
 	return makeEmpty()
 }
 
@@ -83,10 +85,14 @@ func (s *single) IsEmpty() bool {
 }
 
 // Concat t to the right of the receiver
-func (s *single) Concatr(t FingerTree) FingerTree {
-	return t.Pushl(s.data)
+func (s *single) Concatr(t FingerTreeComponent, mdTypes mdataTypeMap) FingerTreeComponent {
+	return t.Pushl(s.data, mdTypes)
 }
 
-func (s *single) Concatl(t FingerTree) FingerTree {
-	return t.Pushr(s.data)
+func (s *single) Concatl(t FingerTreeComponent, mdTypes mdataTypeMap) FingerTreeComponent {
+	return t.Pushr(s.data, mdTypes)
+}
+
+func (s *single) ToSlice() Slice {
+	return ToSlice(s)
 }

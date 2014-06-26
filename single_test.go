@@ -7,16 +7,16 @@ import (
 )
 
 func TestSinglePushl(test *testing.T) {
-	n := makeSingle(1)
-	r := n.Pushl(2)
+	n := makeSingle(1, mdataStandardTypes)
+	r := n.Pushl(2, mdataStandardTypes)
 	if cmpslices(ToSlice(r), []Any{2, 1}) == false {
 		test.Error(fmt.Sprintf("Expected n.Pushl(2) to result in sequence [2 1], got %v", ToSlice(r)))
 	}
 }
 
 func TestSinglePopl(test *testing.T) {
-	n := makeSingle(1)
-	r, e := n.Popl()
+	n := makeSingle(1, mdataStandardTypes)
+	r, e := n.Popl(mdataStandardTypes)
 	_, isEmpty := r.(*empty)
 	if !isEmpty {
 		test.Error("Expected n.Popl() result to be an empty node")
@@ -27,21 +27,21 @@ func TestSinglePopl(test *testing.T) {
 }
 
 func TestSinglePushr(test *testing.T) {
-	n := makeSingle(1)
-	r := n.Pushr(2)
+	n := makeSingle(1, mdataStandardTypes)
+	r := n.Pushr(2, mdataStandardTypes)
 	if cmpslices(ToSlice(r), []Any{1, 2}) == false {
 		test.Error(fmt.Sprintf("Expected n.Pushr(2) to result in sequence [1 2], got %v", ToSlice(r)))
 	}
 }
 
-func TestSingleImplementsFingerTree(test *testing.T) {
+func TestSingleImplementsFingerTreeComponent(test *testing.T) {
 	stype := reflect.TypeOf(&single{})
-	itype := reflect.TypeOf((*FingerTree)(nil)).Elem()
+	itype := reflect.TypeOf((*FingerTreeComponent)(nil)).Elem()
 	TypeConformityTest(test, stype, itype)
 }
 
 func TestSingleFoldl(test *testing.T) {
-	n := makeSingle(1)
+	n := makeSingle(1, mdataStandardTypes)
 	add := func(a Any, b Any) Any {
 		return append(a.(Slice), b)
 	}
@@ -52,7 +52,7 @@ func TestSingleFoldl(test *testing.T) {
 }
 
 func TestSingleFoldr(test *testing.T) {
-	n := makeSingle(1)
+	n := makeSingle(1, mdataStandardTypes)
 	add := func(a Any, b Any) Any {
 		return append(a.(Slice), b)
 	}
@@ -63,7 +63,7 @@ func TestSingleFoldr(test *testing.T) {
 }
 
 func TestSingleIterr(test *testing.T) {
-	n := makeSingle(1)
+	n := makeSingle(1, mdataStandardTypes)
 	sum := 0
 	add := func(b Any) {
 		sum += b.(int)
@@ -75,7 +75,7 @@ func TestSingleIterr(test *testing.T) {
 }
 
 func TestSingleIterl(test *testing.T) {
-	n := makeSingle(1)
+	n := makeSingle(1, mdataStandardTypes)
 	sum := 0
 	add := func(b Any) {
 		sum += b.(int)
@@ -87,35 +87,35 @@ func TestSingleIterl(test *testing.T) {
 }
 
 func TestSingleHeadr(test *testing.T) {
-	v := (makeSingle(1)).Headr()
+	v := (makeSingle(1, mdataStandardTypes)).Headr()
 	if v != 1 {
 		test.Error(fmt.Sprintf("single{1}.Headr() should be 1, got %v", v))
 	}
 }
 
 func TestSingleTailr(test *testing.T) {
-	v := (makeSingle(1)).Tailr()
+	v := (makeSingle(1, mdataStandardTypes)).Tailr(mdataStandardTypes)
 	if !v.IsEmpty() {
 		test.Error(fmt.Sprintf("single{1}.Tailr() should be empty, got %v", v))
 	}
 }
 
 func TestSingleHeadl(test *testing.T) {
-	v := (makeSingle(1)).Headl()
+	v := (makeSingle(1, mdataStandardTypes)).Headl()
 	if v != 1 {
 		test.Error(fmt.Sprintf("single{1}.Headl() should be 1, got %v", v))
 	}
 }
 
 func TestSingleTaill(test *testing.T) {
-	v := (makeSingle(1)).Taill()
+	v := (makeSingle(1, mdataStandardTypes)).Taill(mdataStandardTypes)
 	if !v.IsEmpty() {
 		test.Error(fmt.Sprintf("single{1}.Taill() should be empty, got %v", v))
 	}
 }
 
 func TestSingleIsEmpty(test *testing.T) {
-	v := makeSingle(1)
+	v := makeSingle(1, mdataStandardTypes)
 	if v.IsEmpty() {
 		test.Error("Expected makeSingle(1).IsEmpty() to be false")
 	}
@@ -123,57 +123,57 @@ func TestSingleIsEmpty(test *testing.T) {
 
 func TestSingleConcatl(test *testing.T) {
 	e := makeEmpty()
-	s := e.Pushl(1)
-	t := s.Pushl(2)
-	o := (makeEmpty()).Pushl(3)
+	s := e.Pushl(1, mdataStandardTypes)
+	t := s.Pushl(2, mdataStandardTypes)
+	o := (makeEmpty()).Pushl(3, mdataStandardTypes)
 
 	expected := append(ToSlice(t), ToSlice(s)...)
-	r := s.Concatl(t)
+	r := s.Concatl(t, mdataStandardTypes)
 	if !cmpslices(expected, ToSlice(r)) {
-		test.Error(fmt.Sprintf("Expected s.Concatl to return %v, got %v", expected, ToSlice(s.Concatl(t))))
+		test.Error(fmt.Sprintf("Expected s.Concatl to return %v, got %v", expected, ToSlice(s.Concatl(t, mdataStandardTypes))))
 	}
 
 	expected = append(ToSlice(o), ToSlice(s)...)
-	r = s.Concatl(o)
+	r = s.Concatl(o, mdataStandardTypes)
 	if !cmpslices(expected, ToSlice(r)) {
-		test.Error(fmt.Sprintf("Expected s.Concatl to return %v, got %v", expected, ToSlice(s.Concatl(o))))
+		test.Error(fmt.Sprintf("Expected s.Concatl to return %v, got %v", expected, ToSlice(s.Concatl(o, mdataStandardTypes))))
 	}
 
 	expected = append(ToSlice(e), ToSlice(s)...)
-	r = s.Concatl(e)
+	r = s.Concatl(e, mdataStandardTypes)
 	if !cmpslices(expected, ToSlice(r)) {
-		test.Error(fmt.Sprintf("Expected s.Concatl to return %v, got %v", expected, ToSlice(s.Concatl(e))))
+		test.Error(fmt.Sprintf("Expected s.Concatl to return %v, got %v", expected, ToSlice(s.Concatl(e, mdataStandardTypes))))
 	}
 }
 
 func TestSingleConcatr(test *testing.T) {
 	e := makeEmpty()
-	s := e.Pushl(1)
-	t := s.Pushl(2)
-	o := (makeEmpty()).Pushl(3)
+	s := e.Pushl(1, mdataStandardTypes)
+	t := s.Pushl(2, mdataStandardTypes)
+	o := (makeEmpty()).Pushl(3, mdataStandardTypes)
 
 	expected := append(ToSlice(s), ToSlice(t)...)
-	r := s.Concatr(t)
+	r := s.Concatr(t, mdataStandardTypes)
 	if !cmpslices(expected, ToSlice(r)) {
-		test.Error(fmt.Sprintf("Expected s.Concatr to return %v, got %v", expected, ToSlice(s.Concatr(t))))
+		test.Error(fmt.Sprintf("Expected s.Concatr to return %v, got %v", expected, ToSlice(s.Concatr(t, mdataStandardTypes))))
 	}
 
 	expected = append(ToSlice(s), ToSlice(o)...)
-	r = s.Concatr(o)
+	r = s.Concatr(o, mdataStandardTypes)
 	if !cmpslices(expected, ToSlice(r)) {
-		test.Error(fmt.Sprintf("Expected s.Concatr to return %v, got %v", expected, ToSlice(s.Concatr(o))))
+		test.Error(fmt.Sprintf("Expected s.Concatr to return %v, got %v", expected, ToSlice(s.Concatr(o, mdataStandardTypes))))
 	}
 
 	expected = append(ToSlice(s), ToSlice(e)...)
-	r = s.Concatr(e)
+	r = s.Concatr(e, mdataStandardTypes)
 	if !cmpslices(expected, ToSlice(r)) {
-		test.Error(fmt.Sprintf("Expected s.Concatr to return %v, got %v", expected, ToSlice(s.Concatr(e))))
+		test.Error(fmt.Sprintf("Expected s.Concatr to return %v, got %v", expected, ToSlice(s.Concatr(e, mdataStandardTypes))))
 	}
 }
 
 func TestSingleFTSize(test *testing.T) {
-	s := makeSingle(2)
-	if s.mdataForKey(ft_size_key).(int) != 1 {
-		test.Error(fmt.Sprintf("Expected s.ft_size to equal 1, got %v", s.mdataForKey(ft_size_key).(int)))
+	s := makeSingle(2, mdataStandardTypes)
+	if s.mdataForKey(ft_size_key, mdataStandardTypes).(int) != 1 {
+		test.Error(fmt.Sprintf("Expected s.ft_size to equal 1, got %v", s.mdataForKey(ft_size_key, mdataStandardTypes).(int)))
 	}
 }
