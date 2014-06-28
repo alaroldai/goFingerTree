@@ -30,24 +30,14 @@ func TestSliceImplementsMonoid(test *testing.T) {
 	TypeConformityTest(test, stype, itype)
 }
 
-func TestSliceIterL(test *testing.T) {
+func TestSliceIter(test *testing.T) {
 	x := Slice{1, 2, 3, 4, 5}
-	Iter_TestL(test, x, x)
+	Iter_Test(test, x, x)
 }
 
-func TestSliceIterR(test *testing.T) {
+func TestSliceFold(test *testing.T) {
 	x := Slice{1, 2, 3, 4, 5}
-	Iter_TestR(test, x, x)
-}
-
-func TestSliceFoldL(test *testing.T) {
-	x := Slice{1, 2, 3, 4, 5}
-	Fold_TestL(test, x, x)
-}
-
-func TestSliceFoldR(test *testing.T) {
-	x := Slice{1, 2, 3, 4, 5}
-	Fold_TestR(test, x, x)
+	Fold_Test(test, x, x)
 }
 
 func Slice_TestM(test *testing.T, x Any, y Slice, msg string) {

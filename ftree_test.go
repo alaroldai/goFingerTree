@@ -12,37 +12,26 @@ func TestFTreeImplementsFingerTree(test *testing.T) {
 	TypeConformityTest(test, stype, itype)
 }
 
-func TestFTreeFoldl(test *testing.T) {
+func TestFTreeFold(test *testing.T) {
 	var n FingerTree = makeEmpty()
+	var s Slice = Slice{}
 	for i := 0; i < 20; i++ {
 		n = n.Pushr(i)
+		s = s.Pushr(i)
 	}
-
-	add := func(a Any, b Any) Any {
-		return append(a.(Slice), b)
-	}
-	r := n.Foldl(add, Slice{})
-	expected := Slice{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19}
-	if !cmpslices(r.(Slice), expected) {
-		test.Error(fmt.Sprintf("Expected n.Foldl to return %v, got %v", expected, r))
-	}
+	Fold_Test(test, n, s)
 }
 
-func TestFTreeFoldr(test *testing.T) {
+func TestFTreeIter(test *testing.T) {
 	var n FingerTree = makeEmpty()
+	var s Slice = Slice{}
 	for i := 0; i < 20; i++ {
-		n = n.Pushl(i)
+		n = n.Pushr(i)
+		s = s.Pushr(i)
 	}
-
-	add := func(a Any, b Any) Any {
-		return append(a.(Slice), b)
-	}
-	r := n.Foldr(add, Slice{})
-	expect := Slice{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19}
-	if !cmpslices(r.(Slice), expect) {
-		test.Error(fmt.Sprintf("Expected n.Foldl to return %v, got %v", expect, r))
-	}
+	Iter_Test(test, n, s)
 }
+
 
 func TestFTreePushl(test *testing.T) {
 	var n FingerTree = makeSingle(0)
@@ -119,38 +108,6 @@ func TestFTreePushr(test *testing.T) {
 
 	if cmpslices(ToSlice(n), expected) == false {
 		test.Error(fmt.Sprintf("Expected push sequence to result in sequence %v, got %v", expected, ToSlice(n)))
-	}
-}
-
-func TestFTreeIterl(test *testing.T) {
-	var n FingerTree = makeEmpty()
-	for i := 0; i < 10; i++ {
-		n = n.Pushl(i)
-	}
-
-	sum := 0
-	add := func(d Any) {
-		sum += d.(int)
-	}
-	n.Iterl(add)
-	if sum != 45 {
-		test.Error(fmt.Sprintf("Expected n.Iterl to result in sum 110, got %v", sum))
-	}
-}
-
-func TestFTreeIterr(test *testing.T) {
-	var n FingerTree = makeEmpty()
-	for i := 0; i < 10; i++ {
-		n = n.Pushl(i)
-	}
-
-	sum := 0
-	add := func(d Any) {
-		sum += d.(int)
-	}
-	n.Iterr(add)
-	if sum != 45 {
-		test.Error(fmt.Sprintf("Expected n.Iterl to result in sum 110, got %v", sum))
 	}
 }
 

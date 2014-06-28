@@ -12,50 +12,14 @@ func TestEmptyImplementsFingerTree(test *testing.T) {
 	TypeConformityTest(test, stype, itype)
 }
 
-func TestEmptyFoldl(test *testing.T) {
+func TestEmptyFold(test *testing.T) {
 	n := makeEmpty()
-	add := func(a Any, b Any) Any {
-		return append(a.(Slice), b)
-	}
-	r := n.Foldl(add, Slice{})
-	if !cmpslices(r.(Slice), Slice{}) {
-		test.Error(fmt.Sprintf("Expected n.Foldl to return %v, got %v", Slice{}, r))
-	}
+	Fold_Test(test, n, Slice{})
 }
 
-func TestEmptyFoldr(test *testing.T) {
+func TestEmptyIter(test *testing.T) {
 	n := makeEmpty()
-	add := func(a Any, b Any) Any {
-		return append(a.(Slice), b)
-	}
-	r := n.Foldr(add, Slice{})
-	if !cmpslices(r.(Slice), Slice{}) {
-		test.Error(fmt.Sprintf("Expected n.Foldl to return %v, got %v", Slice{}, r))
-	}
-}
-
-func TestEmptyIterr(test *testing.T) {
-	n := makeEmpty()
-	sum := 0
-	add := func(b Any) {
-		sum += b.(int)
-	}
-	n.Iterr(add)
-	if sum != 0 {
-		test.Error("Expected n.Iterr to return 0, got " + string(sum))
-	}
-}
-
-func TestEmptyIterl(test *testing.T) {
-	n := makeEmpty()
-	sum := 0
-	add := func(b Any) {
-		sum += b.(int)
-	}
-	n.Iterl(add)
-	if sum != 0 {
-		test.Error("Expected n.Iterl to return 0, got " + string(sum))
-	}
+	Iter_Test(test, n, Slice{})
 }
 
 func TestEmptyPushl(test *testing.T) {
