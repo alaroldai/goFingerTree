@@ -50,6 +50,12 @@ func TestSingleIter(test *testing.T) {
 	Iter_Test(test, n, Slice{1})
 }
 
+func TestSingleMeasure(test *testing.T) {
+	n := makeSingle(mfree{1})
+	r := n.Measure()
+	Slice_TestM(test, r, Slice{1}, "single{mfree{1}}.Measure()")
+}
+
 func TestSingleHeadr(test *testing.T) {
 	v := (makeSingle(1)).Headr()
 	if v != 1 {

@@ -12,6 +12,16 @@ func TestFTreeImplementsFingerTree(test *testing.T) {
 	TypeConformityTest(test, stype, itype)
 }
 
+func TestFTreeMeasure(test *testing.T) {
+	var n FingerTree = makeEmpty()
+	var s Slice = Slice{}
+	for i := 0; i < 20; i++ {
+		n = n.Pushr(mfree{i})
+		s = s.Pushr(i)
+	}
+	Slice_TestM(test, n.Measure(), s, fmt.Sprintf("ftree{mfree%v}.Measure()", s))
+}
+
 func TestFTreeFold(test *testing.T) {
 	var n FingerTree = makeEmpty()
 	var s Slice = Slice{}

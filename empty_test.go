@@ -12,6 +12,14 @@ func TestEmptyImplementsFingerTree(test *testing.T) {
 	TypeConformityTest(test, stype, itype)
 }
 
+func TestEmptyMeasure(test *testing.T) {
+	n := makeEmpty()
+	r := n.Measure()
+	if r != Zero {
+		test.Error(fmt.Sprintf("empty{}.Measure() should be Zero, got %v", r))
+	}
+}
+
 func TestEmptyFold(test *testing.T) {
 	n := makeEmpty()
 	Fold_Test(test, n, Slice{})
