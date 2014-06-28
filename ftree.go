@@ -5,32 +5,25 @@ package fingerTree
  */
 
 type ftree struct {
-	size int
+	measure Monoid
 	left  Slice
 	child FingerTree
 	right Slice
 }
 
 func makeFTree(left Slice, child FingerTree, right Slice) *ftree {
-	sz := (Slice{left, right}).Foldl(func (init Any, curr Any) Any {
-		return curr.(Slice).Foldl(func (i Any, a Any) Any {
-			an, succ := a.(mdata)
-			if succ {
-				return i.(int) + an.ft_size()
-			}
-			return i.(int) + 1
-		}, init)
-	}, 0).(int) + child.ft_size()
+	mdata := Measure(left).Plus(Measure(child)).Plus(Measure(right))
+
 	return &ftree{
-		sz,
+		mdata,
 		left,
 		child,
 		right,
 	}
 }
 
-func (t *ftree) ft_size() int {
-	return t.size
+func (t *ftree) Measure() Monoid {
+	return t.measure
 }
 
 func (t *ftree) Foldl(f FoldFunc, initial Any) Any {

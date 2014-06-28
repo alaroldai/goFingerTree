@@ -19,6 +19,14 @@ type Sliceable interface {
 	ToSlice() Slice
 }
 
+func (s Slice) Measure() Monoid {
+	fold := func(acc Any, item Any) Any {
+		return acc.(Monoid).Plus(Measure(item))
+	}
+
+	return s.Foldl(fold, Zero).(Monoid)
+}
+
 func (s Slice) Foldl(f FoldFunc, init Any) Any {
 	var v = init
 	for _, x := range s {

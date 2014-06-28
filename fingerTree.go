@@ -4,7 +4,7 @@ type Any interface{}
 
 type FingerTree interface {
 	Foldable
-	mdata
+	Measured
 
 	Pushl(d Any) FingerTree
 	Pushr(d Any) FingerTree

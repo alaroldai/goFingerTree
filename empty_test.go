@@ -172,10 +172,3 @@ func TestEmptyConcatr(test *testing.T) {
 		test.Error(fmt.Sprintf("Expected e.Concatr to return %v, got %v", ToSlice(o), ToSlice(e.Concatr(o))))
 	}
 }
-
-func TestEmptyFTSize(test *testing.T) {
-	e := makeEmpty()
-	if e.ft_size() != 0 {
-		test.Error(fmt.Sprintf("Expected e.ft_size to equal 0, got %v", e.ft_size()))
-	}
-}
