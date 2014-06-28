@@ -70,3 +70,11 @@ func SliceEqual(a, b Slice) bool {
 func (s Slice) ToSlice() Slice {
 	return s
 }
+
+func (s Slice) Pushl(item Any) Slice {
+	return append(Slice{item}, s...)
+}
+
+func (s Slice) Pushr(item Any) Slice {
+	return append(s, item)
+}
