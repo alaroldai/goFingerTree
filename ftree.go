@@ -12,7 +12,7 @@ type ftree struct {
 }
 
 func makeFTree(left Slice, child FingerTree, right Slice) *ftree {
-	mdata := Measure(left).Plus(Measure(child)).Plus(Measure(right))
+	mdata := left.Measure().Plus(child.Measure()).Plus(right.Measure())
 
 	return &ftree{
 		mdata,
