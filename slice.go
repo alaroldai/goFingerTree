@@ -27,6 +27,15 @@ func (s Slice) Measure() Monoid {
 	return s.Foldl(fold, Zero).(Monoid)
 }
 
+func (s Slice) Plus(rm Monoid) Monoid {
+	if rm == Zero {
+		return s
+	}
+
+	r := rm.(Slice)
+	return append(s, r...)
+}
+
 func (s Slice) Foldl(f FoldFunc, init Any) Any {
 	var v = init
 	for _, x := range s {

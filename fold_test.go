@@ -23,16 +23,12 @@ func ToSliceR(s Iterable) Slice {
 
 func Iter_TestL(test *testing.T, it Iterable, x Slice) {
 	r := ToSliceL(it)
-	if ! SliceEqual(r, x) {
-		test.Error(fmt.Sprintf("Iter_TestL: ToSliceL(%v) should be %v, got %v", it, x, r))
-	}
+	Slice_TestM(test, r, x, fmt.Sprintf("ToSliceL(%v)", it))
 }
 
 func Iter_TestR(test *testing.T, it Iterable, x Slice) {
 	r := ToSliceR(it)
-	if ! SliceEqual(r, x) {
-		test.Error(fmt.Sprintf("Iter_TestR: ToSliceR(%v) should be %v, got %v", it, x, r))
-	}
+	Slice_TestM(test, r, x, fmt.Sprintf("ToSliceR(%v)", it))
 }
 
 func ToSliceLF(s Foldable) Slice {
@@ -49,14 +45,10 @@ func ToSliceRF(s Foldable) Slice {
 
 func Fold_TestL(test *testing.T, it Foldable, x Slice) {
 	r := ToSliceLF(it)
-	if ! SliceEqual(r, x) {
-		test.Error(fmt.Sprintf("Fold_TestL: ToSliceLF(%v) should be %v, got %v", it, x, r))
-	}
+	Slice_TestM(test, r, x, fmt.Sprintf("ToSliceLF(%v)", it))
 }
 
 func Fold_TestR(test *testing.T, it Foldable, x Slice) {
 	r := ToSliceRF(it)
-	if ! SliceEqual(r, x) {
-		test.Error(fmt.Sprintf("Fold_TestR: ToSliceRF(%v) should be %v, got %v", it, x, r))
-	}
+	Slice_TestM(test, r, x, fmt.Sprintf("ToSliceRF(%v)", it))
 }
