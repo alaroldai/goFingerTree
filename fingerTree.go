@@ -4,6 +4,7 @@ type Any interface{}
 
 type FingerTree interface {
 	Foldable
+	Measured
 
 	Pushl(d Any) FingerTree
 	Pushr(d Any) FingerTree
@@ -27,7 +28,17 @@ type FingerTree interface {
 	Concatl(other FingerTree) FingerTree
 	Concatr(other FingerTree) FingerTree
 
+	Split(pred func(Monoid)bool) (FingerTree, FingerTree)
+
 	IsEmpty() bool
+
+	// internal: split into (left, x, right)
+	// where x is the first item whose totaled Measure satisfies 'pred'
+	// requires that:
+	//    - !pred(init)
+	//    - pred(init + tree.Measure())
+	//    - !tree.IsEmpty()
+	splitTree(pred func(Monoid)bool, init Monoid) (FingerTree, Any, FingerTree)
 }
 
 func ToSlice(t FingerTree) Slice {
@@ -42,7 +53,7 @@ func ToFingerTree(f Foldable) FingerTree {
 		return tree.(FingerTree).Pushr(item)
 	}
 
-	return f.Foldl(push, &empty{}).(FingerTree)
+	return f.Foldl(push, makeEmpty()).(FingerTree)
 }
 
 /**
@@ -57,13 +68,13 @@ func nodes(xs Slice) Slice {
 		panic("Can't make a node from a single element.")
 	}
 	if len(xs) == 2 {
-		return Slice{&node2{[2]Any{xs[0], xs[1]}}}
+		return Slice{makeNode2(xs[0], xs[1])}
 	}
 	if len(xs) == 3 {
-		return Slice{&node3{[3]Any{xs[0], xs[1], xs[2]}}}
+		return Slice{makeNode3(xs[0], xs[1], xs[2])}
 	}
 	if len(xs) == 4 {
-		return Slice{&node2{[2]Any{xs[0], xs[1]}}, &node2{[2]Any{xs[2], xs[3]}}}
+		return Slice{makeNode2(xs[0], xs[1]), makeNode2(xs[2], xs[3])}
 	}
 	if len(xs) > 4 {
 		return append(nodes(xs[:3]), nodes(xs[3:])...)
@@ -117,5 +128,9 @@ func glue(l FingerTree, c Slice, r FingerTree) FingerTree {
 
 	ns := nodes(append(append(lt.right, c...), rt.left...))
 	nc := glue(lt.child, ns, rt.child)
-	return &ftree{lt.left, rt.right, nc}
+	return makeFTree(
+		lt.left,
+		nc,
+		rt.right,
+	)
 }

@@ -3,10 +3,22 @@ package fingerTree
 type node interface {
 	Foldable
 	Sliceable
+	Measured
 }
 
 type node2 struct {
+	measure Monoid
 	data [2]Any
+}
+
+func makeNode2(a, b Any) *node2 {
+	mdata := Measure(a).Plus(Measure(b))
+
+	return &node2{mdata, [2]Any{a, b}}
+}
+
+func (n node2) Measure() Monoid {
+	return n.measure
 }
 
 func (n node2) ToSlice() Slice {
@@ -30,7 +42,18 @@ func (n node2) Iterr(f IterFunc) {
 }
 
 type node3 struct {
+	measure Monoid
 	data [3]Any
+}
+
+func makeNode3(a, b, c Any) *node3 {
+	mdata := Measure(a).Plus(Measure(b)).Plus(Measure(c))
+
+	return &node3{mdata, [3]Any{a, b, c}}
+}
+
+func (n node3) Measure() Monoid {
+	return n.measure
 }
 
 func (n node3) ToSlice() Slice {

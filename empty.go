@@ -2,6 +2,14 @@ package fingerTree
 
 type empty struct{}
 
+func makeEmpty() *empty {
+	return &empty{}
+}
+
+func (e *empty) Measure() Monoid {
+	return Zero
+}
+
 func (e *empty) Foldl(f FoldFunc, initial Any) Any {
 	return initial
 }
@@ -11,19 +19,19 @@ func (e *empty) Foldr(f FoldFunc, initial Any) Any {
 }
 
 func (e *empty) Pushl(d Any) FingerTree {
-	return &single{d}
+	return makeSingle(d)
 }
 
 func (e *empty) Popl() (FingerTree, Any) {
-	return &empty{}, nil
+	return makeEmpty(), nil
 }
 
 func (e *empty) Popr() (FingerTree, Any) {
-	return &empty{}, nil
+	return makeEmpty(), nil
 }
 
 func (e *empty) Pushr(d Any) FingerTree {
-	return &single{d}
+	return makeSingle(d)
 }
 
 func (e *empty) Iterl(f IterFunc) {
