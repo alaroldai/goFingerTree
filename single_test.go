@@ -40,50 +40,20 @@ func TestSingleImplementsFingerTree(test *testing.T) {
 	TypeConformityTest(test, stype, itype)
 }
 
-func TestSingleFoldl(test *testing.T) {
+func TestSingleFold(test *testing.T) {
 	n := makeSingle(1)
-	add := func(a Any, b Any) Any {
-		return append(a.(Slice), b)
-	}
-	r := n.Foldl(add, Slice{})
-	if !cmpslices(r.(Slice), Slice{1}) {
-		test.Error(fmt.Sprintf("Expected n.Foldl to return %v, got %v", Slice{1}, r))
-	}
+	Fold_Test(test, n, Slice{1})
 }
 
-func TestSingleFoldr(test *testing.T) {
+func TestSingleIter(test *testing.T) {
 	n := makeSingle(1)
-	add := func(a Any, b Any) Any {
-		return append(a.(Slice), b)
-	}
-	r := n.Foldr(add, Slice{})
-	if !cmpslices(r.(Slice), Slice{1}) {
-		test.Error(fmt.Sprintf("Expected n.Foldr to return %v, got %v", Slice{1}, r))
-	}
+	Iter_Test(test, n, Slice{1})
 }
 
-func TestSingleIterr(test *testing.T) {
-	n := makeSingle(1)
-	sum := 0
-	add := func(b Any) {
-		sum += b.(int)
-	}
-	n.Iterr(add)
-	if sum != 1 {
-		test.Error("Expected n.Iterr to return 1, got " + string(sum))
-	}
-}
-
-func TestSingleIterl(test *testing.T) {
-	n := makeSingle(1)
-	sum := 0
-	add := func(b Any) {
-		sum += b.(int)
-	}
-	n.Iterl(add)
-	if sum != 1 {
-		test.Error("Expected n.Iterl to return 1, got " + string(sum))
-	}
+func TestSingleMeasure(test *testing.T) {
+	n := makeSingle(mfree{1})
+	r := n.Measure()
+	Slice_TestM(test, r, Slice{1}, "single{mfree{1}}.Measure()")
 }
 
 func TestSingleHeadr(test *testing.T) {
@@ -168,12 +138,5 @@ func TestSingleConcatr(test *testing.T) {
 	r = s.Concatr(e)
 	if !cmpslices(expected, ToSlice(r)) {
 		test.Error(fmt.Sprintf("Expected s.Concatr to return %v, got %v", expected, ToSlice(s.Concatr(e))))
-	}
-}
-
-func TestSingleFTSize(test *testing.T) {
-	e := makeSingle(2)
-	if e.ft_size() != 1 {
-		test.Error(fmt.Sprintf("Expected e.ft_size to equal 1, got %v", e.ft_size()))
 	}
 }

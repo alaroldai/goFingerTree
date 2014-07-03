@@ -4,7 +4,7 @@ type Any interface{}
 
 type FingerTree interface {
 	Foldable
-	mdata
+	Measured
 
 	Pushl(d Any) FingerTree
 	Pushr(d Any) FingerTree
@@ -28,7 +28,17 @@ type FingerTree interface {
 	Concatl(other FingerTree) FingerTree
 	Concatr(other FingerTree) FingerTree
 
+	Split(pred func(Monoid)bool) (FingerTree, FingerTree)
+
 	IsEmpty() bool
+
+	// internal: split into (left, x, right)
+	// where x is the first item whose totaled Measure satisfies 'pred'
+	// requires that:
+	//    - !pred(init)
+	//    - pred(init + tree.Measure())
+	//    - !tree.IsEmpty()
+	splitTree(pred func(Monoid)bool, init Monoid) (FingerTree, Any, FingerTree)
 }
 
 func ToSlice(t FingerTree) Slice {
