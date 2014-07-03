@@ -6,16 +6,16 @@ import (
 	"testing"
 )
 
-func TestFTreeTripleImplementsFingerTreeComponent(test *testing.T) {
-	stype := reflect.TypeOf(&ftreeTriple{})
-	itype := reflect.TypeOf((*FingerTreeComponent)(nil)).Elem()
+func TestFTreeImplementsFingerTree(test *testing.T) {
+	stype := reflect.TypeOf(&ftree{})
+	itype := reflect.TypeOf((*FingerTree)(nil)).Elem()
 	TypeConformityTest(test, stype, itype)
 }
 
-func TestFTreeTripleFoldl(test *testing.T) {
-	var n FingerTreeComponent = makeEmpty()
+func TestFTreeFoldl(test *testing.T) {
+	var n FingerTree = makeEmpty()
 	for i := 0; i < 20; i++ {
-		n = n.Pushr(i, mdataStandardTypes)
+		n = n.Pushr(i)
 	}
 
 	add := func(a Any, b Any) Any {
@@ -28,10 +28,10 @@ func TestFTreeTripleFoldl(test *testing.T) {
 	}
 }
 
-func TestFTreeTripleFoldr(test *testing.T) {
-	var n FingerTreeComponent = makeEmpty()
+func TestFTreeFoldr(test *testing.T) {
+	var n FingerTree = makeEmpty()
 	for i := 0; i < 20; i++ {
-		n = n.Pushl(i, mdataStandardTypes)
+		n = n.Pushl(i)
 	}
 
 	add := func(a Any, b Any) Any {
@@ -44,11 +44,11 @@ func TestFTreeTripleFoldr(test *testing.T) {
 	}
 }
 
-func TestFTreeTriplePushl(test *testing.T) {
-	var n FingerTreeComponent = makeSingle(0, mdataStandardTypes)
+func TestFTreePushl(test *testing.T) {
+	var n FingerTree = makeSingle(0)
 
 	for i := 1; i < 20; i++ {
-		n = n.Pushl(i, mdataStandardTypes)
+		n = n.Pushl(i)
 	}
 
 	if cmpslices(ToSlice(n), Slice{19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0}) == false {
@@ -56,63 +56,63 @@ func TestFTreeTriplePushl(test *testing.T) {
 	}
 }
 
-func TestFTreeTriplePopl(test *testing.T) {
-	var n FingerTreeComponent = makeEmpty()
+func TestFTreePopl(test *testing.T) {
+	var n FingerTree = makeEmpty()
 
 	for i := 0; i < 20; i++ {
-		n = n.Pushl(i, mdataStandardTypes)
+		n = n.Pushl(i)
 	}
 
 	var e Any
 	for i := 19; i >= 0; i-- {
-		n, e = n.Popl(mdataStandardTypes)
+		n, e = n.Popl()
 		if e != i {
 			test.Error(fmt.Sprintf("Expected pop result to be %v, got %v", i, e))
 		}
 	}
 
 	for i := 0; i < 22; i++ {
-		n = n.Pushr(i, mdataStandardTypes)
+		n = n.Pushr(i)
 	}
 	for i := 0; i < 22; i++ {
-		n, e = n.Popl(mdataStandardTypes)
+		n, e = n.Popl()
 		if e != i {
 			test.Error(fmt.Sprintf("Expected pop result to be %v, got %v", i, e))
 		}
 	}
 }
 
-func TestFTreeTriplePopr(test *testing.T) {
-	var n FingerTreeComponent = makeEmpty()
+func TestFTreePopr(test *testing.T) {
+	var n FingerTree = makeEmpty()
 
 	for i := 0; i < 20; i++ {
-		n = n.Pushr(i, mdataStandardTypes)
+		n = n.Pushr(i)
 	}
 
 	var e Any
 	for i := 19; i >= 0; i-- {
-		n, e = n.Popr(mdataStandardTypes)
+		n, e = n.Popr()
 		if e != i {
 			test.Error(fmt.Sprintf("Expected pop result to be %v, got %v", i, e))
 		}
 	}
 
 	for i := 0; i < 22; i++ {
-		n = n.Pushl(i, mdataStandardTypes)
+		n = n.Pushl(i)
 	}
 	for i := 0; i < 22; i++ {
-		n, e = n.Popr(mdataStandardTypes)
+		n, e = n.Popr()
 		if e != i {
 			test.Error(fmt.Sprintf("Expected pop result to be %v, got %v", i, e))
 		}
 	}
 }
 
-func TestFTreeTriplePushr(test *testing.T) {
-	var n FingerTreeComponent = makeSingle(0, mdataStandardTypes)
+func TestFTreePushr(test *testing.T) {
+	var n FingerTree = makeSingle(0)
 
 	for i := 1; i < 20; i++ {
-		n = n.Pushr(i, mdataStandardTypes)
+		n = n.Pushr(i)
 	}
 
 	expected := []Any{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19}
@@ -122,10 +122,10 @@ func TestFTreeTriplePushr(test *testing.T) {
 	}
 }
 
-func TestFTreeTripleIterl(test *testing.T) {
-	var n FingerTreeComponent = makeEmpty()
+func TestFTreeIterl(test *testing.T) {
+	var n FingerTree = makeEmpty()
 	for i := 0; i < 10; i++ {
-		n = n.Pushl(i, mdataStandardTypes)
+		n = n.Pushl(i)
 	}
 
 	sum := 0
@@ -138,10 +138,10 @@ func TestFTreeTripleIterl(test *testing.T) {
 	}
 }
 
-func TestFTreeTripleIterr(test *testing.T) {
-	var n FingerTreeComponent = makeEmpty()
+func TestFTreeIterr(test *testing.T) {
+	var n FingerTree = makeEmpty()
 	for i := 0; i < 10; i++ {
-		n = n.Pushl(i, mdataStandardTypes)
+		n = n.Pushl(i)
 	}
 
 	sum := 0
@@ -154,83 +154,83 @@ func TestFTreeTripleIterr(test *testing.T) {
 	}
 }
 
-func TestFTreeTripleHeadr(test *testing.T) {
-	v := (makeEmpty()).Pushr(1, mdataStandardTypes).Pushr(2, mdataStandardTypes)
+func TestFTreeHeadr(test *testing.T) {
+	v := (makeEmpty()).Pushr(1).Pushr(2)
 	r := v.Headr()
 	if r != 2 {
-		test.Error(fmt.Sprintf("ftreeTriple{1 2}.Headr() should be 2, got %v", r))
+		test.Error(fmt.Sprintf("ftree{1 2}.Headr() should be 2, got %v", r))
 	}
 
-	v = (makeEmpty()).Pushl(1, mdataStandardTypes).Pushl(2, mdataStandardTypes)
+	v = (makeEmpty()).Pushl(1).Pushl(2)
 	r = v.Headr()
 	if r != 1 {
-		test.Error(fmt.Sprintf("ftreeTriple{1 2}.Headr() should be 2, got %v", r))
+		test.Error(fmt.Sprintf("ftree{1 2}.Headr() should be 2, got %v", r))
 	}
 }
 
-func TestFTreeTripleTailr(test *testing.T) {
+func TestFTreeTailr(test *testing.T) {
 	xs := Slice{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
-	t := ToFingerTreeComponent(xs, mdataStandardTypes).Tailr(mdataStandardTypes)
+	t := ToFingerTree(xs).Tailr()
 	ys := ToSlice(t)
 	expected := xs[:len(xs)-1]
 	if !SliceEqual(expected, ys) {
-		test.Error(fmt.Sprintf("ftreeTriple{%v}.Tailr() should be %v, got %v", xs, expected, ys))
+		test.Error(fmt.Sprintf("ftree{%v}.Tailr() should be %v, got %v", xs, expected, ys))
 	}
 }
 
-func TestFTreeTripleHeadl(test *testing.T) {
-	v := makeEmpty().Pushl(1, mdataStandardTypes).Pushr(2, mdataStandardTypes).Headl()
+func TestFTreeHeadl(test *testing.T) {
+	v := makeEmpty().Pushl(1).Pushr(2).Headl()
 	if v != 1 {
-		test.Error(fmt.Sprintf("ftreeTriple{1 2}.Headr() should be 1, got %v", v))
+		test.Error(fmt.Sprintf("ftree{1 2}.Headr() should be 1, got %v", v))
 	}
 }
 
-func TestFTreeTripleTaill(test *testing.T) {
+func TestFTreeTaill(test *testing.T) {
 	xs := Slice{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
-	t := ToFingerTreeComponent(xs, mdataStandardTypes).Taill(mdataStandardTypes)
+	t := ToFingerTree(xs).Taill()
 	ys := ToSlice(t)
 	expected := xs[1:]
 	if !SliceEqual(expected, ys) {
-		test.Error(fmt.Sprintf("ftreeTriple{%v}.Tailr() should be %v, got %v", xs, expected, ys))
+		test.Error(fmt.Sprintf("ftree{%v}.Tailr() should be %v, got %v", xs, expected, ys))
 	}
 }
 
-func TestFTreeTripleIsEmpty(test *testing.T) {
-	v := ToFingerTreeComponent(Slice{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, mdataStandardTypes)
+func TestFTreeIsEmpty(test *testing.T) {
+	v := ToFingerTree(Slice{1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
 	if v.IsEmpty() {
 		test.Error("Expected isEmpty to be false")
 	}
 }
 
-func TestFTreeTripleConcatl(test *testing.T) {
+func TestFTreeConcatl(test *testing.T) {
 	e := makeEmpty()
-	s := e.Pushl(1, mdataStandardTypes)
-	var t FingerTreeComponent = makeEmpty()
+	s := e.Pushl(1)
+	var t FingerTree = makeEmpty()
 	for i := 0; i < 25; i++ {
-		t = t.Pushl(i, mdataStandardTypes)
+		t = t.Pushl(i)
 	}
 
-	var o FingerTreeComponent = makeEmpty()
+	var o FingerTree = makeEmpty()
 	for i := 0; i < 5; i++ {
-		o = o.Pushl(i, mdataStandardTypes)
+		o = o.Pushl(i)
 	}
 
 	testCombinations := func() {
 
 		expected := append(ToSlice(o), ToSlice(t)...)
-		r := t.Concatl(o, mdataStandardTypes)
+		r := t.Concatl(o)
 		if !cmpslices(expected, ToSlice(r)) {
 			test.Error(fmt.Sprintf("Expected t.Concatl to return %v, got %v", expected, ToSlice(r)))
 		}
 
 		expected = append(ToSlice(s), ToSlice(t)...)
-		r = t.Concatl(s, mdataStandardTypes)
+		r = t.Concatl(s)
 		if !cmpslices(expected, ToSlice(r)) {
 			test.Error(fmt.Sprintf("Expected t.Concatl to return %v, got %v", expected, ToSlice(r)))
 		}
 
 		expected = append(ToSlice(e), ToSlice(t)...)
-		r = t.Concatl(e, mdataStandardTypes)
+		r = t.Concatl(e)
 		if !cmpslices(expected, ToSlice(r)) {
 			test.Error(fmt.Sprintf("Expected t.Concatl to return %v, got %v", expected, ToSlice(r)))
 		}
@@ -241,63 +241,63 @@ func TestFTreeTripleConcatl(test *testing.T) {
 	t = makeEmpty()
 	o = makeEmpty()
 	for i := 0; i < 5; i++ {
-		t = t.Pushl(i, mdataStandardTypes)
+		t = t.Pushl(i)
 	}
 	for i := 0; i < 25; i++ {
-		o = o.Pushl(i, mdataStandardTypes)
+		o = o.Pushl(i)
 	}
 	testCombinations()
 
 	t = makeEmpty()
 	o = makeEmpty()
 	for i := 0; i < 25; i++ {
-		t = t.Pushl(i, mdataStandardTypes)
+		t = t.Pushl(i)
 	}
 	for i := 0; i < 105; i++ {
-		o = o.Pushl(i, mdataStandardTypes)
+		o = o.Pushl(i)
 	}
 	testCombinations()
 
 	t = makeEmpty()
 	o = makeEmpty()
 	for i := 0; i < 105; i++ {
-		t = t.Pushl(i, mdataStandardTypes)
+		t = t.Pushl(i)
 	}
 	for i := 0; i < 25; i++ {
-		o = o.Pushl(i, mdataStandardTypes)
+		o = o.Pushl(i)
 	}
 	testCombinations()
 }
 
-func TestFTreeTripleConcatr(test *testing.T) {
+func TestFTreeConcatr(test *testing.T) {
 	e := makeEmpty()
-	s := e.Pushr(1, mdataStandardTypes)
-	var t FingerTreeComponent = makeEmpty()
+	s := e.Pushr(1)
+	var t FingerTree = makeEmpty()
 	for i := 0; i < 25; i++ {
-		t = t.Pushr(i, mdataStandardTypes)
+		t = t.Pushr(i)
 	}
 
-	var o FingerTreeComponent = makeEmpty()
+	var o FingerTree = makeEmpty()
 	for i := 0; i < 5; i++ {
-		o = o.Pushr(i, mdataStandardTypes)
+		o = o.Pushr(i)
 	}
 
 	testCombinations := func() {
 
 		expected := append(ToSlice(t), ToSlice(o)...)
-		r := t.Concatr(o, mdataStandardTypes)
+		r := t.Concatr(o)
 		if !cmpslices(expected, ToSlice(r)) {
 			test.Error(fmt.Sprintf("Expected t.Concatr to return %v, got %v", expected, ToSlice(r)))
 		}
 
 		expected = append(ToSlice(t), ToSlice(s)...)
-		r = t.Concatr(s, mdataStandardTypes)
+		r = t.Concatr(s)
 		if !cmpslices(expected, ToSlice(r)) {
 			test.Error(fmt.Sprintf("Expected t.Concatr to return %v, got %v", expected, ToSlice(r)))
 		}
 
 		expected = append(ToSlice(t), ToSlice(e)...)
-		r = t.Concatr(e, mdataStandardTypes)
+		r = t.Concatr(e)
 		if !cmpslices(expected, ToSlice(r)) {
 			test.Error(fmt.Sprintf("Expected t.Concatr to return %v, got %v", expected, ToSlice(r)))
 		}
@@ -308,41 +308,41 @@ func TestFTreeTripleConcatr(test *testing.T) {
 	t = makeEmpty()
 	o = makeEmpty()
 	for i := 0; i < 5; i++ {
-		t = t.Pushr(i, mdataStandardTypes)
+		t = t.Pushr(i)
 	}
 	for i := 0; i < 25; i++ {
-		o = o.Pushr(i, mdataStandardTypes)
+		o = o.Pushr(i)
 	}
 	testCombinations()
 
 	t = makeEmpty()
 	o = makeEmpty()
 	for i := 0; i < 25; i++ {
-		t = t.Pushr(i, mdataStandardTypes)
+		t = t.Pushr(i)
 	}
 	for i := 0; i < 105; i++ {
-		o = o.Pushr(i, mdataStandardTypes)
+		o = o.Pushr(i)
 	}
 	testCombinations()
 
 	t = makeEmpty()
 	o = makeEmpty()
 	for i := 0; i < 105; i++ {
-		t = t.Pushr(i, mdataStandardTypes)
+		t = t.Pushr(i)
 	}
 	for i := 0; i < 25; i++ {
-		o = o.Pushr(i, mdataStandardTypes)
+		o = o.Pushr(i)
 	}
 	testCombinations()
 }
 
-func TestFTreeTripleFTSize(test *testing.T) {
-	var t FingerTreeComponent = makeEmpty()
+func TestFTreeFTSize(test *testing.T) {
+	var t FingerTree = makeEmpty()
 	exp := 105
 	for i := 0; i < exp; i++ {
-		t = t.Pushr(i, mdataStandardTypes)
+		t = t.Pushr(i)
 	}
-	if t.mdataForKey(ft_size_key, mdataStandardTypes).(int) != exp {
-		test.Error(fmt.Sprintf("Expected t.mdataForKey(ft_size_key).(int) to equal %v, got %v", exp, t.mdataForKey(ft_size_key, mdataStandardTypes).(int)))
+	if t.mdataForKey(ft_size_key).(int) != exp {
+		test.Error(fmt.Sprintf("Expected t.mdataForKey(ft_size_key).(int) to equal %v, got %v", exp, t.mdataForKey(ft_size_key).(int)))
 	}
 }
