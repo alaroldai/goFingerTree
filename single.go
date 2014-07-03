@@ -20,24 +20,24 @@ func (s *single) Foldr(f FoldFunc, initial Any) Any {
 	return f(initial, s.data)
 }
 
-func (s *single) Pushl(d Any) FingerTree {
-	return makeFTree(
+func (s *single) pushl(d Any) FingerTreeComponent {
+	return makeFTreeTriple(
 		[]Any{d},
 		makeEmpty(),
 		[]Any{s.data},
 	)
 }
 
-func (s *single) Popl() (FingerTree, Any) {
+func (s *single) popl() (FingerTreeComponent, Any) {
 	return makeEmpty(), s.data
 }
 
-func (s *single) Popr() (FingerTree, Any) {
+func (s *single) popr() (FingerTreeComponent, Any) {
 	return makeEmpty(), s.data
 }
 
-func (s *single) Pushr(d Any) FingerTree {
-	return makeFTree(
+func (s *single) pushr(d Any) FingerTreeComponent {
+	return makeFTreeTriple(
 		[]Any{s.data},
 		makeEmpty(),
 		[]Any{d},
@@ -52,31 +52,43 @@ func (s *single) Iterr(f IterFunc) {
 	f(s.data)
 }
 
-func (s *single) Headr() Any {
+func (s *single) headr() Any {
 	return s.data
 }
 
-func (s *single) Headl() Any {
+func (s *single) headl() Any {
 	return s.data
 }
 
-func (s *single) Tailr() FingerTree {
+func (s *single) tailr() FingerTreeComponent {
 	return makeEmpty()
 }
 
-func (s *single) Taill() FingerTree {
+func (s *single) taill() FingerTreeComponent {
 	return makeEmpty()
 }
 
-func (s *single) IsEmpty() bool {
+func (s *single) isEmpty() bool {
 	return false
 }
 
-// Concat t to the right of the receiver
-func (s *single) Concatr(t FingerTree) FingerTree {
-	return t.Pushl(s.data)
+// concat t to the right of the receiver
+func (s *single) concatr(t FingerTreeComponent) FingerTreeComponent {
+	return t.pushl(s.data)
 }
 
-func (s *single) Concatl(t FingerTree) FingerTree {
-	return t.Pushr(s.data)
+func (s *single) concatl(t FingerTreeComponent) FingerTreeComponent {
+	return t.pushr(s.data)
+}
+
+func (s single) splitTree(pred func(Monoid) bool, init Monoid) (FingerTreeComponent, Any, FingerTreeComponent) {
+	return makeEmpty(), s.data, makeEmpty()
+}
+
+func (s single) split(pred func(Monoid) bool) (FingerTreeComponent, FingerTreeComponent) {
+	if pred(s.Measure()) {
+		return &empty{}, &s
+	} else {
+		return &s, &empty{}
+	}
 }

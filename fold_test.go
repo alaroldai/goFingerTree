@@ -1,14 +1,14 @@
 package fingerTree
 
 import (
-	"testing"
 	"fmt"
+	"testing"
 )
 
 func ToSliceL(s Iterable) Slice {
 	var res = Slice{}
 	s.Iterl(func(item Any) {
-		res = res.Pushr(item)
+		res = res.pushr(item)
 	})
 	return res
 }
@@ -16,20 +16,20 @@ func ToSliceL(s Iterable) Slice {
 func ToSliceR(s Iterable) Slice {
 	var res = Slice{}
 	s.Iterr(func(item Any) {
-		res = res.Pushl(item)
+		res = res.pushl(item)
 	})
 	return res
 }
 
 func ToSliceLF(s Foldable) Slice {
 	return s.Foldl(func(acc Any, item Any) Any {
-		return acc.(Slice).Pushr(item)
+		return acc.(Slice).pushr(item)
 	}, Slice{}).(Slice)
 }
 
 func ToSliceRF(s Foldable) Slice {
 	return s.Foldr(func(acc Any, item Any) Any {
-		return acc.(Slice).Pushl(item)
+		return acc.(Slice).pushl(item)
 	}, Slice{}).(Slice)
 }
 

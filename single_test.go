@@ -6,37 +6,37 @@ import (
 	"testing"
 )
 
-func TestSinglePushl(test *testing.T) {
+func TestSinglepushl(test *testing.T) {
 	n := makeSingle(1)
-	r := n.Pushl(2)
+	r := n.pushl(2)
 	if cmpslices(ToSlice(r), []Any{2, 1}) == false {
-		test.Error(fmt.Sprintf("Expected n.Pushl(2) to result in sequence [2 1], got %v", ToSlice(r)))
+		test.Error(fmt.Sprintf("Expected n.pushl(2) to result in sequence [2 1], got %v", ToSlice(r)))
 	}
 }
 
-func TestSinglePopl(test *testing.T) {
+func TestSinglepopl(test *testing.T) {
 	n := makeSingle(1)
-	r, e := n.Popl()
+	r, e := n.popl()
 	_, isEmpty := r.(*empty)
 	if !isEmpty {
-		test.Error("Expected n.Popl() result to be an empty node")
+		test.Error("Expected n.popl() result to be an empty node")
 	}
 	if e != 1 {
-		test.Error("Expected n.Popl() result to be 1")
+		test.Error("Expected n.popl() result to be 1")
 	}
 }
 
-func TestSinglePushr(test *testing.T) {
+func TestSinglepushr(test *testing.T) {
 	n := makeSingle(1)
-	r := n.Pushr(2)
+	r := n.pushr(2)
 	if cmpslices(ToSlice(r), []Any{1, 2}) == false {
-		test.Error(fmt.Sprintf("Expected n.Pushr(2) to result in sequence [1 2], got %v", ToSlice(r)))
+		test.Error(fmt.Sprintf("Expected n.pushr(2) to result in sequence [1 2], got %v", ToSlice(r)))
 	}
 }
 
-func TestSingleImplementsFingerTree(test *testing.T) {
+func TestSingleImplementsFingerTreeComponent(test *testing.T) {
 	stype := reflect.TypeOf(&single{})
-	itype := reflect.TypeOf((*FingerTree)(nil)).Elem()
+	itype := reflect.TypeOf((*FingerTreeComponent)(nil)).Elem()
 	TypeConformityTest(test, stype, itype)
 }
 
@@ -56,87 +56,87 @@ func TestSingleMeasure(test *testing.T) {
 	Slice_TestM(test, r, Slice{1}, "single{mfree{1}}.Measure()")
 }
 
-func TestSingleHeadr(test *testing.T) {
-	v := (makeSingle(1)).Headr()
+func TestSingleheadr(test *testing.T) {
+	v := (makeSingle(1)).headr()
 	if v != 1 {
-		test.Error(fmt.Sprintf("single{1}.Headr() should be 1, got %v", v))
+		test.Error(fmt.Sprintf("single{1}.headr() should be 1, got %v", v))
 	}
 }
 
-func TestSingleTailr(test *testing.T) {
-	v := (makeSingle(1)).Tailr()
-	if !v.IsEmpty() {
-		test.Error(fmt.Sprintf("single{1}.Tailr() should be empty, got %v", v))
+func TestSingletailr(test *testing.T) {
+	v := (makeSingle(1)).tailr()
+	if !v.isEmpty() {
+		test.Error(fmt.Sprintf("single{1}.tailr() should be empty, got %v", v))
 	}
 }
 
-func TestSingleHeadl(test *testing.T) {
-	v := (makeSingle(1)).Headl()
+func TestSingleheadl(test *testing.T) {
+	v := (makeSingle(1)).headl()
 	if v != 1 {
-		test.Error(fmt.Sprintf("single{1}.Headl() should be 1, got %v", v))
+		test.Error(fmt.Sprintf("single{1}.headl() should be 1, got %v", v))
 	}
 }
 
-func TestSingleTaill(test *testing.T) {
-	v := (makeSingle(1)).Taill()
-	if !v.IsEmpty() {
-		test.Error(fmt.Sprintf("single{1}.Taill() should be empty, got %v", v))
+func TestSingletaill(test *testing.T) {
+	v := (makeSingle(1)).taill()
+	if !v.isEmpty() {
+		test.Error(fmt.Sprintf("single{1}.taill() should be empty, got %v", v))
 	}
 }
 
-func TestSingleIsEmpty(test *testing.T) {
+func TestSingleisEmpty(test *testing.T) {
 	v := makeSingle(1)
-	if v.IsEmpty() {
-		test.Error("Expected makeSingle(1).IsEmpty() to be false")
+	if v.isEmpty() {
+		test.Error("Expected makeSingle(1).isEmpty() to be false")
 	}
 }
 
-func TestSingleConcatl(test *testing.T) {
+func TestSingleconcatl(test *testing.T) {
 	e := makeEmpty()
-	s := e.Pushl(1)
-	t := s.Pushl(2)
-	o := (makeEmpty()).Pushl(3)
+	s := e.pushl(1)
+	t := s.pushl(2)
+	o := (makeEmpty()).pushl(3)
 
 	expected := append(ToSlice(t), ToSlice(s)...)
-	r := s.Concatl(t)
+	r := s.concatl(t)
 	if !cmpslices(expected, ToSlice(r)) {
-		test.Error(fmt.Sprintf("Expected s.Concatl to return %v, got %v", expected, ToSlice(s.Concatl(t))))
+		test.Error(fmt.Sprintf("Expected s.concatl to return %v, got %v", expected, ToSlice(s.concatl(t))))
 	}
 
 	expected = append(ToSlice(o), ToSlice(s)...)
-	r = s.Concatl(o)
+	r = s.concatl(o)
 	if !cmpslices(expected, ToSlice(r)) {
-		test.Error(fmt.Sprintf("Expected s.Concatl to return %v, got %v", expected, ToSlice(s.Concatl(o))))
+		test.Error(fmt.Sprintf("Expected s.concatl to return %v, got %v", expected, ToSlice(s.concatl(o))))
 	}
 
 	expected = append(ToSlice(e), ToSlice(s)...)
-	r = s.Concatl(e)
+	r = s.concatl(e)
 	if !cmpslices(expected, ToSlice(r)) {
-		test.Error(fmt.Sprintf("Expected s.Concatl to return %v, got %v", expected, ToSlice(s.Concatl(e))))
+		test.Error(fmt.Sprintf("Expected s.concatl to return %v, got %v", expected, ToSlice(s.concatl(e))))
 	}
 }
 
-func TestSingleConcatr(test *testing.T) {
+func TestSingleconcatr(test *testing.T) {
 	e := makeEmpty()
-	s := e.Pushl(1)
-	t := s.Pushl(2)
-	o := (makeEmpty()).Pushl(3)
+	s := e.pushl(1)
+	t := s.pushl(2)
+	o := (makeEmpty()).pushl(3)
 
 	expected := append(ToSlice(s), ToSlice(t)...)
-	r := s.Concatr(t)
+	r := s.concatr(t)
 	if !cmpslices(expected, ToSlice(r)) {
-		test.Error(fmt.Sprintf("Expected s.Concatr to return %v, got %v", expected, ToSlice(s.Concatr(t))))
+		test.Error(fmt.Sprintf("Expected s.concatr to return %v, got %v", expected, ToSlice(s.concatr(t))))
 	}
 
 	expected = append(ToSlice(s), ToSlice(o)...)
-	r = s.Concatr(o)
+	r = s.concatr(o)
 	if !cmpslices(expected, ToSlice(r)) {
-		test.Error(fmt.Sprintf("Expected s.Concatr to return %v, got %v", expected, ToSlice(s.Concatr(o))))
+		test.Error(fmt.Sprintf("Expected s.concatr to return %v, got %v", expected, ToSlice(s.concatr(o))))
 	}
 
 	expected = append(ToSlice(s), ToSlice(e)...)
-	r = s.Concatr(e)
+	r = s.concatr(e)
 	if !cmpslices(expected, ToSlice(r)) {
-		test.Error(fmt.Sprintf("Expected s.Concatr to return %v, got %v", expected, ToSlice(s.Concatr(e))))
+		test.Error(fmt.Sprintf("Expected s.concatr to return %v, got %v", expected, ToSlice(s.concatr(e))))
 	}
 }

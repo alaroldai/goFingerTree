@@ -18,19 +18,19 @@ func (e *empty) Foldr(f FoldFunc, initial Any) Any {
 	return initial
 }
 
-func (e *empty) Pushl(d Any) FingerTree {
+func (e *empty) pushl(d Any) FingerTreeComponent {
 	return makeSingle(d)
 }
 
-func (e *empty) Popl() (FingerTree, Any) {
+func (e *empty) popl() (FingerTreeComponent, Any) {
 	return makeEmpty(), nil
 }
 
-func (e *empty) Popr() (FingerTree, Any) {
+func (e *empty) popr() (FingerTreeComponent, Any) {
 	return makeEmpty(), nil
 }
 
-func (e *empty) Pushr(d Any) FingerTree {
+func (e *empty) pushr(d Any) FingerTreeComponent {
 	return makeSingle(d)
 }
 
@@ -42,31 +42,39 @@ func (e *empty) Iterr(f IterFunc) {
 	return
 }
 
-func (e *empty) Headr() Any {
+func (e *empty) headr() Any {
 	return nil
 }
 
-func (e *empty) Headl() Any {
+func (e *empty) headl() Any {
 	return nil
 }
 
-func (e *empty) Tailr() FingerTree {
+func (e *empty) tailr() FingerTreeComponent {
 	// Not sure if this makes sense
 	return nil
 }
 
-func (e *empty) Taill() FingerTree {
+func (e *empty) taill() FingerTreeComponent {
 	return nil
 }
 
-func (e *empty) IsEmpty() bool {
+func (e *empty) isEmpty() bool {
 	return true
 }
 
-func (e *empty) Concatr(t FingerTree) FingerTree {
+func (e *empty) concatr(t FingerTreeComponent) FingerTreeComponent {
 	return t
 }
 
-func (e *empty) Concatl(t FingerTree) FingerTree {
+func (e *empty) concatl(t FingerTreeComponent) FingerTreeComponent {
 	return t
+}
+
+func (e empty) splitTree(pred func(Monoid) bool, init Monoid) (FingerTreeComponent, Any, FingerTreeComponent) {
+	panic("splitTree called on empty tree")
+}
+
+func (e empty) split(pred func(Monoid) bool) (FingerTreeComponent, FingerTreeComponent) {
+	return &empty{}, &empty{}
 }

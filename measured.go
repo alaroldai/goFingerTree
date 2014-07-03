@@ -14,7 +14,6 @@ func Measure(m Any) Monoid {
 	}
 }
 
-
 // The free measure, that just makes a list of its contents
 type mfree struct {
 	v Any

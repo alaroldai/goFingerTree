@@ -80,10 +80,10 @@ func (s Slice) ToSlice() Slice {
 	return s
 }
 
-func (s Slice) Pushl(item Any) Slice {
+func (s Slice) pushl(item Any) Slice {
 	return append(Slice{item}, s...)
 }
 
-func (s Slice) Pushr(item Any) Slice {
+func (s Slice) pushr(item Any) Slice {
 	return append(s, item)
 }
