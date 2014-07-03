@@ -172,8 +172,8 @@ func TestSingleConcatr(test *testing.T) {
 }
 
 func TestSingleFTSize(test *testing.T) {
-	s := makeSingle(2)
-	if s.mdataForKey(ft_size_key).(int) != 1 {
-		test.Error(fmt.Sprintf("Expected s.ft_size to equal 1, got %v", s.mdataForKey(ft_size_key).(int)))
+	e := makeSingle(2)
+	if e.ft_size() != 1 {
+		test.Error(fmt.Sprintf("Expected e.ft_size to equal 1, got %v", e.ft_size()))
 	}
 }

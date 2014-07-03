@@ -342,7 +342,7 @@ func TestFTreeFTSize(test *testing.T) {
 	for i := 0; i < exp; i++ {
 		t = t.Pushr(i)
 	}
-	if t.mdataForKey(ft_size_key).(int) != exp {
-		test.Error(fmt.Sprintf("Expected t.mdataForKey(ft_size_key).(int) to equal %v, got %v", exp, t.mdataForKey(ft_size_key).(int)))
+	if t.ft_size() != exp {
+		test.Error(fmt.Sprintf("Expected t.ft_size() to equal %v, got %v", exp, t.ft_size()))
 	}
 }

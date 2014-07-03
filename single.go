@@ -1,25 +1,21 @@
 package fingerTree
 
 type single struct {
-	metadata map[string]Any
-	data     Any
+	size int
+	data Any
 }
 
 func makeSingle(d Any) *single {
-	meta := make(map[string]Any)
-	for k, v := range mdataTypes {
-		sz := v.unit
-		dn, succ := d.(mdata)
-		if succ {
-			sz = dn.mdataForKey(k)
-		}
-		meta[k] = sz
+	sz := 1
+	dn, succ := d.(mdata)
+	if succ {
+		sz = dn.ft_size()
 	}
-	return &single{meta, d}
+	return &single{sz, d}
 }
 
-func (s *single) mdataForKey(key string) Any {
-	return s.metadata[key]
+func (s *single) ft_size() int {
+	return s.size
 }
 
 func (s *single) Foldl(f FoldFunc, initial Any) Any {
